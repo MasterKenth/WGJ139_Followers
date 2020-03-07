@@ -11,6 +11,8 @@ AMainPlayerPawn::AMainPlayerPawn()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	LookDir = EPawnLookDir::Right;
+
 	RootComponent = Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 
 	Sprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("Sprite"));
@@ -18,9 +20,9 @@ AMainPlayerPawn::AMainPlayerPawn()
 	Sprite->SetRelativeRotation(FRotator::MakeFromEuler(FVector(-90, 0, 0)));
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(Sprite);
+	CameraBoom->SetupAttachment(Root);
 	CameraBoom->bDoCollisionTest = false;
-	CameraBoom->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, -90)));
+	CameraBoom->SetRelativeRotation(FRotator::MakeFromEuler(FVector(-90, 0, -90)));
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(CameraBoom);
@@ -43,6 +45,20 @@ UPawnMovementComponent* AMainPlayerPawn::GetMovementComponent() const
 void AMainPlayerPawn::AddMovementInput(FVector WorldDirection, float ScaleValue, bool bForce)
 {
 	Super::AddMovementInput(WorldDirection, ScaleValue, bForce);
+}
+
+void AMainPlayerPawn::UpdateLookDir(float HorizontalInput)
+{
+	if(!FMath::IsNearlyZero(HorizontalInput))
+	{
+		EPawnLookDir lastLookDir = LookDir;
+		LookDir = HorizontalInput > 0 ? EPawnLookDir::Right : EPawnLookDir::Left;
+
+		if(lastLookDir != LookDir)
+		{
+			Sprite->AddWorldRotation(FRotator::MakeFromEuler(FVector(0, 180, 0)));
+		}
+	}
 }
 
 void AMainPlayerPawn::BeginPlay()

@@ -35,6 +35,7 @@ void AMainPlayerController::OnInput_MoveRight(float Value)
   if(MainPlayerPawn != nullptr)
   {
     MainPlayerPawn->AddMovementInput(FVector::ForwardVector, Value);
+    MainPlayerPawn->UpdateLookDir(Value);
   }
 }
 
