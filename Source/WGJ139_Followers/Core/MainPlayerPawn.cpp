@@ -2,33 +2,38 @@
 
 
 #include "MainPlayerPawn.h"
+#include "PaperSpriteComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 
-// Sets default values
 AMainPlayerPawn::AMainPlayerPawn()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	RootComponent = Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+
+	Sprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("Sprite"));
+	Sprite->SetupAttachment(Root);
+	Sprite->SetRelativeRotation(FRotator::MakeFromEuler(FVector(-90, 0, 0)));
+
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraBoom->SetupAttachment(Sprite);
+	CameraBoom->bDoCollisionTest = false;
+	CameraBoom->SetRelativeRotation(FRotator::MakeFromEuler(FVector(0, 0, -90)));
+
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(CameraBoom);
+	Camera->SetProjectionMode(ECameraProjectionMode::Orthographic);
+	Camera->SetOrthoWidth(1000.0f);
 }
 
-// Called when the game starts or when spawned
-void AMainPlayerPawn::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
 void AMainPlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-// Called to bind functionality to input
-void AMainPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AMainPlayerPawn::BeginPlay()
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	Super::BeginPlay();
 }
-
