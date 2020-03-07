@@ -201,7 +201,12 @@
                 "C:\\Program Files\\Epic Games\\UE_4.24\\Engine\\Intermediate\\Build\\Win64\\UE4Editor\\Inc\\ClothingSystemRuntimeInterface",
                 "C:\\Program Files\\Epic Games\\UE_4.24\\Engine\\Source\\Runtime\\ClothingSystemRuntimeInterface\\Public",
                 "C:\\Program Files\\Epic Games\\UE_4.24\\Engine\\Source\\Runtime\\AudioMixerCore\\Public",
+                "C:\\Users\\maste\\Documents\\Projects\\Unreal\\WGJ139_Followers\\Intermediate\\Build\\Win64\\UE4Editor\\Inc\\WGJ139_Followers",
                 "C:\\Users\\maste\\Documents\\Projects\\Unreal\\WGJ139_Followers\\Source",
+                "C:\\Program Files\\Epic Games\\UE_4.24\\Engine\\Plugins\\2D\\Paper2D\\Intermediate\\Build\\Win64\\UE4Editor\\Inc\\Paper2D",
+                "C:\\Program Files\\Epic Games\\UE_4.24\\Engine\\Plugins\\2D\\Paper2D\\Source",
+                "C:\\Program Files\\Epic Games\\UE_4.24\\Engine\\Plugins\\2D\\Paper2D\\Source\\Paper2D\\Classes",
+                "C:\\Program Files\\Epic Games\\UE_4.24\\Engine\\Plugins\\2D\\Paper2D\\Source\\Paper2D\\Public",
                 "C:\\Program Files\\Epic Games\\UE_4.24\\Engine\\Source\\ThirdParty\\PhysX3\\PxShared\\include",
                 "C:\\Program Files\\Epic Games\\UE_4.24\\Engine\\Source\\ThirdParty\\PhysX3\\PxShared\\include\\cudamanager",
                 "C:\\Program Files\\Epic Games\\UE_4.24\\Engine\\Source\\ThirdParty\\PhysX3\\PxShared\\include\\filebuf",
@@ -536,7 +541,9 @@
                 "AUDIOMIXERCORE_VTABLE=DLLIMPORT_VTABLE",
                 "AUDIOMIXERCORE_API=",
                 "WGJ139_FOLLOWERS_VTABLE=DLLEXPORT_VTABLE",
-                "WGJ139_FOLLOWERS_API="
+                "WGJ139_FOLLOWERS_API=",
+                "PAPER2D_VTABLE=DLLIMPORT_VTABLE",
+                "PAPER2D_API="
             ],
             "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.24.28314/bin/Hostx64/x64/cl.exe",
             "cStandard": "c11",
