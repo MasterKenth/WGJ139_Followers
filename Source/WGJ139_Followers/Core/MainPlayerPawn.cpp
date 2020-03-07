@@ -2,6 +2,7 @@
 
 
 #include "MainPlayerPawn.h"
+#include "MainPawnMovementComponent.h"
 #include "PaperSpriteComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -25,12 +26,23 @@ AMainPlayerPawn::AMainPlayerPawn()
 	Camera->SetupAttachment(CameraBoom);
 	Camera->SetProjectionMode(ECameraProjectionMode::Orthographic);
 	Camera->SetOrthoWidth(1000.0f);
+
+	MainPawnMovementComponent = CreateDefaultSubobject<UMainPawnMovementComponent>(TEXT("MainPawnMovementComponent"));
 }
 
 void AMainPlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+UPawnMovementComponent* AMainPlayerPawn::GetMovementComponent() const
+{
+	return MainPawnMovementComponent;
+}
+
+void AMainPlayerPawn::AddMovementInput(FVector WorldDirection, float ScaleValue, bool bForce)
+{
+	Super::AddMovementInput(WorldDirection, ScaleValue, bForce);
 }
 
 void AMainPlayerPawn::BeginPlay()

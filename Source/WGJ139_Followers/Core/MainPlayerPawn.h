@@ -23,10 +23,14 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly)
 	class UCameraComponent* Camera;
-
+	
+	UPROPERTY(VisibleDefaultsOnly)
+	class UMainPawnMovementComponent* MainPawnMovementComponent;
 
 	AMainPlayerPawn();
 	virtual void Tick(float DeltaTime) override;
+	virtual UPawnMovementComponent* GetMovementComponent() const override;
+	virtual void AddMovementInput(FVector WorldDirection, float ScaleValue = 1.0f, bool bForce = false) override;
 
 protected:
 	virtual void BeginPlay() override;
