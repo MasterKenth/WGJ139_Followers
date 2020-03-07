@@ -19,6 +19,9 @@ class WGJ139_FOLLOWERS_API AMainPlayerPawn : public APawn
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere)
+	float AttackCooldown;
+
 	UPROPERTY(VisibleDefaultsOnly)
 	class USceneComponent* Root;
 
@@ -40,8 +43,11 @@ public:
 	virtual void AddMovementInput(FVector WorldDirection, float ScaleValue = 1.0f, bool bForce = false) override;
 
 	void UpdateLookDir(float HorizontalInput);
+	void TryAttack();
+	bool CanAttack() const;
 
 protected:
+	float LastAttackTime;
 	EPawnLookDir LookDir;
 
 	virtual void BeginPlay() override;

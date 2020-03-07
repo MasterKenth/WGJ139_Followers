@@ -6,11 +6,14 @@
 #include "PaperSpriteComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 
 AMainPlayerPawn::AMainPlayerPawn()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	AttackCooldown = 1.0f;
 	LookDir = EPawnLookDir::Right;
 
 	RootComponent = Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
@@ -60,6 +63,36 @@ void AMainPlayerPawn::UpdateLookDir(float HorizontalInput)
 		}
 	}
 }
+
+void AMainPlayerPawn::TryAttack()
+{
+	if(CanAttack())
+	{
+		UE_LOG(LogTemp, Log, TEXT("Attack!"));
+
+		TArray<FHitResult> hits;
+		FVector start = GetActorLocation();
+		FVector end = start + (LookDir == EPawnLookDir::Right ? FVector::ForwardVector : FVector::BackwardVector) * 100;
+		FCollisionShape shape = FCollisionShape::MakeBox(FVector(10, 25, 10));
+		FCollisionQueryParams queryParams;
+		queryParams.AddIgnoredActor(this);
+		if(GetWorld()->SweepMultiByChannel(hits, start, end, FQuat::Identity, ECollisionChannel::ECC_Visibility, shape, queryParams))
+		{
+			UE_LOG(LogTemp, Log, TEXT("Got %d hits!"), hits.Num());
+		}
+
+		DrawDebugBox(GetWorld(), start, shape.GetExtent(), FColor::Blue, false, 1.0f);
+		DrawDebugBox(GetWorld(), end, shape.GetExtent(), FColor::Red, false, 1.0f);
+
+		LastAttackTime = GetWorld()->GetTimeSeconds();
+	}
+}
+
+bool AMainPlayerPawn::CanAttack() const
+{
+	return GetWorld()->GetTimeSeconds() - LastAttackTime >= AttackCooldown;
+}
+
 
 void AMainPlayerPawn::BeginPlay()
 {

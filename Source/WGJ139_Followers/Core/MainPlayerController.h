@@ -27,4 +27,5 @@ protected:
 
 	void OnInput_MoveRight(float Value);
 	void OnInput_MoveUp(float Value);
+	void OnInput_Attack();
 };

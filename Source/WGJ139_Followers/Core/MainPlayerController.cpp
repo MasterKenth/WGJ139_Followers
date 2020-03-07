@@ -20,6 +20,7 @@ void AMainPlayerController::SetupInputComponent()
 
   InputComponent->BindAxis(TEXT("MoveRight"), this, &AMainPlayerController::OnInput_MoveRight);
   InputComponent->BindAxis(TEXT("MoveUp"), this, &AMainPlayerController::OnInput_MoveUp);
+  InputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &AMainPlayerController::OnInput_Attack);
 }
 
 void AMainPlayerController::OnPossess(APawn* aPawn)
@@ -44,5 +45,13 @@ void AMainPlayerController::OnInput_MoveUp(float Value)
   if(MainPlayerPawn != nullptr)
   {
     MainPlayerPawn->AddMovementInput(-FVector::RightVector, Value);
+  }
+}
+
+void AMainPlayerController::OnInput_Attack()
+{
+  if(MainPlayerPawn != nullptr)
+  {
+    MainPlayerPawn->TryAttack();
   }
 }
