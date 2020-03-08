@@ -21,7 +21,7 @@ protected:
 	UPROPERTY()
 	class AMainPlayerPawn* MainPlayerPawn;
 
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 	virtual void OnPossess(APawn* aPawn) override;
 
