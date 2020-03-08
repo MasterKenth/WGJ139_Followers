@@ -93,6 +93,7 @@ void ABasePawn::TryAttack()
 		queryParams.AddIgnoredActor(this);
 		if(GetWorld()->OverlapMultiByChannel(overlaps, center, FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel1, shape, queryParams))
 		{
+			TArray<IDamageableInterface*> uniqueDamageables;
 			for(FOverlapResult& overlap : overlaps)
 			{
 				if(overlap.Actor.IsValid())
@@ -100,10 +101,14 @@ void ABasePawn::TryAttack()
 					IDamageableInterface* damageable = Cast<IDamageableInterface>(overlap.GetActor());
 					if(damageable != nullptr)
 					{
-						UE_LOG(LogTemp, Log, TEXT("Overlap %s"), *overlap.GetActor()->GetName());
-						damageable->TakeDamage(15);
+						uniqueDamageables.AddUnique(damageable);
 					}
 				}
+			}
+
+			for(IDamageableInterface* damageable : uniqueDamageables)
+			{
+					damageable->TakeDamage(15);
 			}
 		}
 
