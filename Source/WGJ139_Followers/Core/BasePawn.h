@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "../Gameplay/DamageableInterface.h"
 #include "BasePawn.generated.h"
 
 UENUM()
@@ -13,8 +14,10 @@ enum class EPawnLookDir : uint8
 	Left
 };
 
+DECLARE_EVENT(ABasePawn, FDeathEvent);
+
 UCLASS()
-class WGJ139_FOLLOWERS_API ABasePawn : public APawn
+class WGJ139_FOLLOWERS_API ABasePawn : public APawn, public IDamageableInterface
 {
 	GENERATED_BODY()
 
@@ -45,9 +48,18 @@ public:
 	void UpdateLookDir(float HorizontalInput);
 	void TryAttack();
 	bool CanAttack() const;
+	
+	virtual void TakeDamage(int32 Damage) override;
+	FDeathEvent& OnDeath() { return DeathEvent; }
 
 protected:
 	float LastAttackTime;
 	EPawnLookDir LookDir;
+
+	int32 Health;
+	int32 MaxHealth;
+	FDeathEvent DeathEvent;
+
 	virtual void BeginPlay() override;
+	virtual void Kill();
 };

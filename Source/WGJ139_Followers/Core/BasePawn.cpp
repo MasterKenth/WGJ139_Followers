@@ -15,6 +15,8 @@ ABasePawn::ABasePawn()
 	AttackCooldown = 1.0f;
 	LookDir = EPawnLookDir::Right;
 
+	Health = MaxHealth = 100;
+
 	RootComponent = Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 
 	Sprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("Sprite"));
@@ -78,7 +80,18 @@ void ABasePawn::TryAttack()
 		queryParams.AddIgnoredActor(this);
 		if(GetWorld()->SweepMultiByChannel(hits, start, end, FQuat::Identity, ECollisionChannel::ECC_Visibility, shape, queryParams))
 		{
-			UE_LOG(LogTemp, Log, TEXT("Got %d hits!"), hits.Num());
+			for(FHitResult& hit : hits)
+			{
+				if(hit.Actor.IsValid())
+				{
+					IDamageableInterface* damageable = Cast<IDamageableInterface>(hit.GetActor());
+					if(damageable != nullptr)
+					{
+						UE_LOG(LogTemp, Log, TEXT("Hit %s"), *hit.GetActor()->GetName());
+						damageable->TakeDamage(15);
+					}
+				}
+			}
 		}
 
 		AttackAnim->SetVisibility(true);
@@ -93,6 +106,18 @@ bool ABasePawn::CanAttack() const
 	return GetWorld()->GetTimeSeconds() - LastAttackTime >= AttackCooldown;
 }
 
+void ABasePawn::TakeDamage(int32 Damage)
+{
+	int32 newHealth = Health - Damage;
+	UE_LOG(LogTemp, Log, TEXT("TakeDamage %d -> %d"), Health, newHealth);
+
+	Health = FMath::Clamp(newHealth, 0, MaxHealth);
+	if(newHealth <= 0)
+	{
+		Kill();
+		DeathEvent.Broadcast();
+	}
+}
 
 void ABasePawn::BeginPlay()
 {
@@ -100,4 +125,11 @@ void ABasePawn::BeginPlay()
 	AttackAnim->Stop();
 	AttackAnim->SetVisibility(false);
 	AttackAnim->SetRelativeLocation(FVector(AttackRange, 0, 0));
+}
+
+void ABasePawn::Kill()
+{
+	Health = 0;
+	Destroy();
+	UE_LOG(LogTemp, Log, TEXT("Dead"));
 }
