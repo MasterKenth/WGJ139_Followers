@@ -38,6 +38,9 @@ public:
 	class UPaperFlipbookComponent* AttackAnim;
 	
 	UPROPERTY(VisibleDefaultsOnly)
+	class UWidgetComponent* HealthBar;
+	
+	UPROPERTY(VisibleDefaultsOnly)
 	class UMainPawnMovementComponent* MainPawnMovementComponent;
 	
 	ABasePawn();
@@ -65,4 +68,6 @@ protected:
 
 	virtual void BeginPlay() override;
 	virtual void Kill();
+	
+	void UpdateHealthBarDisplay();
 };

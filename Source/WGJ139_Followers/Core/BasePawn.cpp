@@ -2,11 +2,13 @@
 
 
 #include "BasePawn.h"
+#include "../UI/HealthBarWidget.h"
 #include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 #include "MainPawnMovementComponent.h"
 #include "PaperSpriteComponent.h"
 #include "PaperFlipbookComponent.h"
-#include "DrawDebugHelpers.h"
+#include "Components/WidgetComponent.h"
 
 ABasePawn::ABasePawn()
 {
@@ -27,6 +29,12 @@ ABasePawn::ABasePawn()
 
 	AttackAnim = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("AttackAnim"));
 	AttackAnim->SetupAttachment(Sprite);
+
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"));
+	HealthBar->SetupAttachment(Root);
+	HealthBar->SetRelativeLocation(FVector(0, -40, 0));
+	HealthBar->SetRelativeRotation(FRotator::MakeFromEuler(FVector(-90, 90, 0)));
+	HealthBar->SetDrawAtDesiredSize(true);
 
 	MainPawnMovementComponent = CreateDefaultSubobject<UMainPawnMovementComponent>(TEXT("MainPawnMovementComponent"));
 }
@@ -117,9 +125,11 @@ bool ABasePawn::CanAttack() const
 void ABasePawn::TakeDamage(int32 Damage)
 {
 	int32 newHealth = Health - Damage;
-	UE_LOG(LogTemp, Log, TEXT("TakeDamage %d -> %d"), Health, newHealth);
 
 	Health = FMath::Clamp(newHealth, 0, MaxHealth);
+
+	UpdateHealthBarDisplay();
+
 	if(newHealth <= 0)
 	{
 		Kill();
@@ -133,6 +143,7 @@ void ABasePawn::BeginPlay()
 	AttackAnim->Stop();
 	AttackAnim->SetVisibility(false);
 	AttackAnim->SetRelativeLocation(FVector(AttackRange, 0, 0));
+	UpdateHealthBarDisplay();
 }
 
 void ABasePawn::Kill()
@@ -140,6 +151,17 @@ void ABasePawn::Kill()
 	Health = 0;
 	Destroy();
 	UE_LOG(LogTemp, Log, TEXT("Dead"));
+}
+
+void ABasePawn::UpdateHealthBarDisplay()
+{
+	HealthBar->SetVisibility(Health > 0 && Health < MaxHealth);
+	
+	UHealthBarWidget* widget = Cast<UHealthBarWidget>(HealthBar->GetUserWidgetObject());
+	if(widget != nullptr)
+	{
+		widget->SetHealthPercent((float)Health / MaxHealth);
+	}
 }
 
 
