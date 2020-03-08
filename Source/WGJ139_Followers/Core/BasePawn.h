@@ -52,6 +52,9 @@ public:
 	virtual void TakeDamage(int32 Damage) override;
 	FDeathEvent& OnDeath() { return DeathEvent; }
 
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
+
 protected:
 	float LastAttackTime;
 	EPawnLookDir LookDir;
