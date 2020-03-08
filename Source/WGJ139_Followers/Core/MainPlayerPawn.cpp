@@ -4,6 +4,7 @@
 #include "MainPlayerPawn.h"
 #include "MainPawnMovementComponent.h"
 #include "PaperSpriteComponent.h"
+#include "PaperFlipbookComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Engine/World.h"
@@ -13,6 +14,7 @@ AMainPlayerPawn::AMainPlayerPawn()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	AttackRange = 50.0f;
 	AttackCooldown = 1.0f;
 	LookDir = EPawnLookDir::Right;
 
@@ -21,6 +23,9 @@ AMainPlayerPawn::AMainPlayerPawn()
 	Sprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("Sprite"));
 	Sprite->SetupAttachment(Root);
 	Sprite->SetRelativeRotation(FRotator::MakeFromEuler(FVector(-90, 0, 0)));
+
+	AttackAnim = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("AttackAnim"));
+	AttackAnim->SetupAttachment(Sprite);
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(Root);
@@ -38,6 +43,16 @@ AMainPlayerPawn::AMainPlayerPawn()
 void AMainPlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if(AttackAnim->IsActive())
+	{
+		int32 frame = AttackAnim->GetPlaybackPositionInFrames();
+		if(frame == AttackAnim->GetFlipbookLengthInFrames() - 1)
+		{
+			AttackAnim->Stop();
+			AttackAnim->SetVisibility(false);
+		}
+	}
 }
 
 UPawnMovementComponent* AMainPlayerPawn::GetMovementComponent() const
@@ -68,12 +83,10 @@ void AMainPlayerPawn::TryAttack()
 {
 	if(CanAttack())
 	{
-		UE_LOG(LogTemp, Log, TEXT("Attack!"));
-
 		TArray<FHitResult> hits;
 		FVector start = GetActorLocation();
-		FVector end = start + (LookDir == EPawnLookDir::Right ? FVector::ForwardVector : FVector::BackwardVector) * 100;
-		FCollisionShape shape = FCollisionShape::MakeBox(FVector(10, 25, 10));
+		FVector end = start + (LookDir == EPawnLookDir::Right ? FVector::ForwardVector : FVector::BackwardVector) * AttackRange;
+		FCollisionShape shape = FCollisionShape::MakeBox(FVector(20, 50, 10));
 		FCollisionQueryParams queryParams;
 		queryParams.AddIgnoredActor(this);
 		if(GetWorld()->SweepMultiByChannel(hits, start, end, FQuat::Identity, ECollisionChannel::ECC_Visibility, shape, queryParams))
@@ -81,8 +94,8 @@ void AMainPlayerPawn::TryAttack()
 			UE_LOG(LogTemp, Log, TEXT("Got %d hits!"), hits.Num());
 		}
 
-		DrawDebugBox(GetWorld(), start, shape.GetExtent(), FColor::Blue, false, 1.0f);
-		DrawDebugBox(GetWorld(), end, shape.GetExtent(), FColor::Red, false, 1.0f);
+		AttackAnim->SetVisibility(true);
+		AttackAnim->PlayFromStart();
 
 		LastAttackTime = GetWorld()->GetTimeSeconds();
 	}
@@ -97,4 +110,7 @@ bool AMainPlayerPawn::CanAttack() const
 void AMainPlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
+	AttackAnim->Stop();
+	AttackAnim->SetVisibility(false);
+	AttackAnim->SetRelativeLocation(FVector(AttackRange, 0, 0));
 }

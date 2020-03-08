@@ -20,6 +20,9 @@ class WGJ139_FOLLOWERS_API AMainPlayerPawn : public APawn
 
 public:
 	UPROPERTY(EditAnywhere)
+	float AttackRange;
+
+	UPROPERTY(EditAnywhere)
 	float AttackCooldown;
 
 	UPROPERTY(VisibleDefaultsOnly)
@@ -27,6 +30,9 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly)
 	class UPaperSpriteComponent* Sprite;
+	
+	UPROPERTY(VisibleDefaultsOnly)
+	class UPaperFlipbookComponent* AttackAnim;
 
 	UPROPERTY(VisibleDefaultsOnly)
 	class USpringArmComponent* CameraBoom;
