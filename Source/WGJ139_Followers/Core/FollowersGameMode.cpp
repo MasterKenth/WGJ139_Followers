@@ -10,6 +10,8 @@
 #include "EngineUtils.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "DrawDebugHelpers.h"
+#include "BasePawn.h"
+#include "GameFramework/PlayerController.h"
 
 DEFINE_LOG_CATEGORY(LogFollowersGameMode);
 
@@ -63,6 +65,12 @@ void AFollowersGameMode::SetupCults()
     {
       FCultData& newCult = FollowersGameState->Cults.Add_GetRef(GeneratePseudoRandomCult(FollowersGameState->Cults));
       newCult.Followers = 1;
+
+      ABasePawn* playerPawn = GetWorld()->GetFirstPlayerController()->GetPawn<ABasePawn>();
+      if(playerPawn)
+      {
+        playerPawn->CultID = newCult.ID;
+      }
     }
 
     // Generate NPC cults
