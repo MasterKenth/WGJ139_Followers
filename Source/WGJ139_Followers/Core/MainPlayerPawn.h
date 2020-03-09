@@ -20,4 +20,7 @@ public:
 	class UCameraComponent* Camera;
 
 	AMainPlayerPawn();
+
+protected:
+	virtual void BeginPlay() override;
 };

@@ -5,6 +5,8 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "PaperSpriteComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 AMainPlayerPawn::AMainPlayerPawn()
 {
@@ -19,4 +21,10 @@ AMainPlayerPawn::AMainPlayerPawn()
 	Camera->SetupAttachment(CameraBoom);
 	Camera->SetProjectionMode(ECameraProjectionMode::Orthographic);
 	Camera->SetOrthoWidth(1000.0f);
+}
+
+void AMainPlayerPawn::BeginPlay()
+{
+	Super::BeginPlay();
+	SetMaterial(UMaterialInstanceDynamic::Create(Sprite->GetMaterial(0), this));
 }
