@@ -2,6 +2,7 @@
 
 
 #include "MainPlayerPawn.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 

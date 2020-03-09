@@ -29,7 +29,7 @@ public:
 	float AttackCooldown;
 
 	UPROPERTY(VisibleDefaultsOnly)
-	class USceneComponent* Root;
+	class UBoxComponent* Root;
 
 	UPROPERTY(VisibleDefaultsOnly)
 	class UPaperSpriteComponent* Sprite;

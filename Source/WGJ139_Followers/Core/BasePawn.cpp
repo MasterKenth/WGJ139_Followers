@@ -5,6 +5,7 @@
 #include "../UI/HealthBarWidget.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "Components/BoxComponent.h"
 #include "MainPawnMovementComponent.h"
 #include "PaperSpriteComponent.h"
 #include "PaperFlipbookComponent.h"
@@ -20,12 +21,14 @@ ABasePawn::ABasePawn()
 
 	Health = MaxHealth = 100;
 
-	RootComponent = Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	RootComponent = Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Root"));
+	Root->SetCollisionProfileName(TEXT("Pawn"));
+	Root->InitBoxExtent(FVector(25, 25, 20));
 
 	Sprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("Sprite"));
 	Sprite->SetupAttachment(Root);
 	Sprite->SetRelativeRotation(FRotator::MakeFromEuler(FVector(-90, 0, 0)));
-	Sprite->SetCollisionProfileName(TEXT("Pawn"));
+	Sprite->SetCollisionProfileName(TEXT("NoCollision"));
 
 	AttackAnim = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("AttackAnim"));
 	AttackAnim->SetupAttachment(Sprite);
