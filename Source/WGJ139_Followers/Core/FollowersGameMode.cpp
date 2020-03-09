@@ -8,6 +8,8 @@
 #include "TimerManager.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "DrawDebugHelpers.h"
 
 DEFINE_LOG_CATEGORY(LogFollowersGameMode);
 
@@ -64,13 +66,13 @@ void AFollowersGameMode::SetupCults()
     }
 
     // Generate NPC cults
-    int32 totalFollowers = 99;
-    int32 numNPCCults = FMath::RandRange(2, 5);
+    const int32 totalFollowersToGenerate = 9;
+    const int32 numNPCCults = FMath::RandRange(2, 5);
     int32 followersGenerated = 0;
     for(int32 i = 0; i < numNPCCults; i++)
     {
-      int32 followersLeft = totalFollowers - followersGenerated;
-      int32 cultsLeftToGenerate = numNPCCults - i;
+      const int32 followersLeft = totalFollowersToGenerate - followersGenerated;
+      const int32 cultsLeftToGenerate = numNPCCults - i;
       int32 newFollowers;
 
       if(cultsLeftToGenerate == 1)
@@ -79,7 +81,7 @@ void AFollowersGameMode::SetupCults()
       }
       else
       {
-        int32 averageFollowersLeft = FMath::RoundToInt(followersLeft / cultsLeftToGenerate);
+        const int32 averageFollowersLeft = FMath::RoundToInt(followersLeft / cultsLeftToGenerate);
         newFollowers = FMath::RoundToInt(averageFollowersLeft * FMath::RandRange(0.75f, 1.25f));
         newFollowers = FMath::Clamp(newFollowers, 1, followersLeft - cultsLeftToGenerate);
       }
@@ -97,7 +99,7 @@ void AFollowersGameMode::SetupCults()
     {
       FCultData& cult = FollowersGameState->Cults[i];
       accumTotalFollowers += cult.Followers;
-      UE_LOG(LogFollowersGameMode, Log, TEXT("\t#%d \t%d/%d followers \t%s\t"), i, cult.Followers, accumTotalFollowers, *cult.Name.ToString());
+      UE_LOG(LogFollowersGameMode, Log, TEXT("\t#%d \t%2d/%3d followers: \t%s \tcolor: %s"), i, cult.Followers, accumTotalFollowers, *cult.Name.ToString(), *cult.Color.ToString());
     }
   }
 }
@@ -113,14 +115,19 @@ void AFollowersGameMode::BeginRound()
     {
       const FBoxSphereBounds bounds = FollowersGameState->ArenaSpawnVolume->GetBounds();
       
-      for(const FCultData& cult : FollowersGameState->Cults)
+      for(int32 c = 0; c < FollowersGameState->Cults.Num(); c++)
       {
-        for(int32 i = 0; i < cult.Followers; i++)
+        const FCultData& cult = FollowersGameState->Cults[c];
+
+        const int32 followersToGenerate = (c == 0) ? cult.Followers - 1 : cult.Followers; // Skip first follower of cult #0 (the player)
+        
+        for(int32 i = 0; i < followersToGenerate; i++)
         {
           ANPCPawn* newPawn = GetWorld()->SpawnActor<ANPCPawn>(FollowersGameState->NPCPawnClass);
           if(newPawn)
           {
             FollowersGameState->SpawnedFollowers.Add(newPawn);
+            newPawn->SetMaterial(cult.PawnMID);
 
             FVector newLoc;
             FHitResult hit;
