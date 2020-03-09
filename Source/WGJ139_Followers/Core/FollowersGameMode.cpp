@@ -186,8 +186,36 @@ FCultData AFollowersGameMode::GenerateRandomCult() const
     "Kira"
   });
 
+  static auto tempColors = TArray<FLinearColor>({
+        FLinearColor::White,
+        FLinearColor(0.3f, 0.3f, 0.3f), // Dark Gray
+        FLinearColor(0.05f, 0.05f, 0.05f), // Black 
+        FLinearColor::Red,
+        FLinearColor::Green,
+        FLinearColor::Blue,
+        FLinearColor::Yellow,
+        FLinearColor(FColor::Cyan),
+        FLinearColor(0.7f, 0.4f, 0.7f), // Pink
+        FLinearColor(0.4f, 0.3, 0.04f), // Dark Orange / Gold
+        FLinearColor(0.2f, 0.12, 0.08f), // Brown
+        FLinearColor(FColor::Purple),
+        FLinearColor(FColor::Emerald)
+  });
+
   FCultData newCult;
   newCult.Name = FText::FromString(tempCoolNames[FMath::RandRange(0, tempCoolNames.Num() - 1)]);
   newCult.Followers = 0;
+  newCult.Color = FLinearColor::MakeRandomColor();
+
+  if(FollowersGameState)
+  {
+    auto mid = UMaterialInstanceDynamic::Create(FollowersGameState->CultNPCPawnMaterialBase, (UObject*)this);
+    if(mid)
+    {
+      mid->SetVectorParameterValue(TEXT("Color"), newCult.Color);
+      newCult.PawnMID = mid;
+    }
+  }
+
   return newCult;
 }
