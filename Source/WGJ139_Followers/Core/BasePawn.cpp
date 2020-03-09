@@ -176,11 +176,11 @@ void ABasePawn::UpdateHealthBarDisplay()
 void ABasePawn::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
-	UE_LOG(LogTemp, Log, TEXT("This (%s) got overlap by %s"), *this->GetName(), *OtherActor->GetName());
+	//UE_LOG(LogTemp, Log, TEXT("This (%s) got overlap by %s"), *this->GetName(), *OtherActor->GetName());
 }
 
 void ABasePawn::NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
 	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
-	UE_LOG(LogTemp, Log, TEXT("This (%s) got hit by %s"), *this->GetName(), *Other->GetName());
+	//UE_LOG(LogTemp, Log, TEXT("This (%s) got hit by %s"), *this->GetName(), *Other->GetName());
 }
