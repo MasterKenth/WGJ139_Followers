@@ -10,6 +10,7 @@
 #include "PaperSpriteComponent.h"
 #include "PaperFlipbookComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 ABasePawn::ABasePawn()
 {
@@ -171,7 +172,11 @@ void ABasePawn::UpdateHealthBarDisplay()
 	}
 }
 
-
+void ABasePawn::SetMaterial(UMaterialInstanceDynamic* MID)
+{
+	DynamicMaterialInstance = MID;
+	Sprite->SetMaterial(0, DynamicMaterialInstance);
+}
 
 void ABasePawn::NotifyActorBeginOverlap(AActor* OtherActor)
 {

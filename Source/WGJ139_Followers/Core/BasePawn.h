@@ -55,10 +55,15 @@ public:
 	virtual void TakeDamage(int32 Damage) override;
 	FDeathEvent& OnDeath() { return DeathEvent; }
 
+	void SetMaterial(class UMaterialInstanceDynamic* MID);
+
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
 protected:
+	UPROPERTY()
+	class UMaterialInstanceDynamic* DynamicMaterialInstance;
+
 	float LastAttackTime;
 	EPawnLookDir LookDir;
 
