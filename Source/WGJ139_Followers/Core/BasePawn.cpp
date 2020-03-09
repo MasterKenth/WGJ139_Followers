@@ -115,9 +115,6 @@ void ABasePawn::TryAttack()
 			}
 		}
 
-		DrawDebugSphere(GetWorld(), center, 10, 8, FColor::Red, false, 1.0f);
-		DrawDebugBox(GetWorld(), center, shape.GetExtent(), FColor::Blue, false, 1.0f);
-
 		AttackAnim->SetVisibility(true);
 		AttackAnim->PlayFromStart();
 
