@@ -42,6 +42,9 @@ public:
 	
 	UPROPERTY(VisibleDefaultsOnly)
 	class UMainPawnMovementComponent* MainPawnMovementComponent;
+
+	UPROPERTY()
+	int32 CultID;
 	
 	ABasePawn();
 	virtual void Tick(float DeltaTime) override;

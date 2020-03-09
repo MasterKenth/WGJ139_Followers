@@ -13,6 +13,9 @@ struct WGJ139_FOLLOWERS_API FCultData
 
 public:
 	UPROPERTY()
+	int32 ID;
+
+	UPROPERTY()
 	FText Name;
 
 	UPROPERTY()

@@ -129,6 +129,7 @@ void AFollowersGameMode::BeginRound()
             FollowersGameState->SpawnedFollowers.Add(newPawn);
             newPawn->SetMaterial(cult.PawnMID);
             newPawn->SpawnDefaultController();
+            newPawn->CultID = cult.ID;
 
             FVector newLoc;
             FHitResult hit;
@@ -169,6 +170,7 @@ void AFollowersGameMode::EndRound()
 
 FCultData AFollowersGameMode::GeneratePseudoRandomCult(const TArray<FCultData>& AlreadyGeneratedCults) const
 {
+  static int32 globalCultID = 0;
   static auto tempCoolNames = TArray<FString>({
     "Seth",
     "Malifucius",
@@ -204,6 +206,7 @@ FCultData AFollowersGameMode::GeneratePseudoRandomCult(const TArray<FCultData>& 
   });
 
   FCultData newCult;
+  newCult.ID = globalCultID++;
   newCult.Followers = 0;
 
   // Generate unique cult name
