@@ -25,6 +25,18 @@ class WGJ139_FOLLOWERS_API AFollowersGameState : public AGameStateBase
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ANPCPawn> NPCPawnClass;
+
 	UPROPERTY()
 	TArray<FCultData> Cults;
+
+	UPROPERTY()
+	class ASpawnVolume* ArenaSpawnVolume;
+
+	UPROPERTY()
+	TArray<ANPCPawn*> SpawnedFollowers;
+
+	UPROPERTY()
+	int32 CurrentRound;
 };

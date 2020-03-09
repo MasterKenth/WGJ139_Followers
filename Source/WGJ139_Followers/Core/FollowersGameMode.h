@@ -7,6 +7,7 @@
 #include "FollowersGameMode.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogFollowersGameMode, Log, All);
+DECLARE_EVENT(AFollowersGameMode, FGameStartEvent);
 
 UCLASS()
 class WGJ139_FOLLOWERS_API AFollowersGameMode : public AGameModeBase
@@ -14,14 +15,21 @@ class WGJ139_FOLLOWERS_API AFollowersGameMode : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
+
+	FGameStartEvent& OnGameStart() { return GameStartEvent; }
 	
 protected:
 	UPROPERTY()
 	class AFollowersGameState* FollowersGameState;
 
+	FGameStartEvent GameStartEvent;
+
 	virtual void BeginPlay() override;
 
+	void StartGame();
 	void SetupCults();
+	void BeginRound();
+	void EndRound();
 
 	struct FCultData GenerateRandomCult() const;
 };
