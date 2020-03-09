@@ -61,7 +61,7 @@ void AFollowersGameMode::SetupCults()
 
     // Add player cult
     {
-      FCultData& newCult = FollowersGameState->Cults.Add_GetRef(GenerateRandomCult());
+      FCultData& newCult = FollowersGameState->Cults.Add_GetRef(GeneratePseudoRandomCult(FollowersGameState->Cults));
       newCult.Followers = 1;
     }
 
@@ -86,7 +86,7 @@ void AFollowersGameMode::SetupCults()
         newFollowers = FMath::Clamp(newFollowers, 1, followersLeft - cultsLeftToGenerate);
       }
 
-      FCultData& newCult = FollowersGameState->Cults.Add_GetRef(GenerateRandomCult());
+      FCultData& newCult = FollowersGameState->Cults.Add_GetRef(GeneratePseudoRandomCult(FollowersGameState->Cults));
       newCult.Followers = newFollowers;
 
       followersGenerated += newFollowers;
@@ -166,7 +166,7 @@ void AFollowersGameMode::EndRound()
 
 }
 
-FCultData AFollowersGameMode::GenerateRandomCult() const
+FCultData AFollowersGameMode::GeneratePseudoRandomCult(const TArray<FCultData>& AlreadyGeneratedCults) const
 {
   static auto tempCoolNames = TArray<FString>({
     "Seth",
@@ -203,10 +203,51 @@ FCultData AFollowersGameMode::GenerateRandomCult() const
   });
 
   FCultData newCult;
-  newCult.Name = FText::FromString(tempCoolNames[FMath::RandRange(0, tempCoolNames.Num() - 1)]);
   newCult.Followers = 0;
-  newCult.Color = FLinearColor::MakeRandomColor();
 
+  // Generate unique cult name
+  int32 tries = 0;
+  int32 maxTries = tempCoolNames.Num();
+
+  int32 nameIndex = FMath::RandRange(0, tempCoolNames.Num() - 1);
+  FString chosenName = tempCoolNames[nameIndex];
+
+  while(tries <= maxTries && AlreadyGeneratedCults.ContainsByPredicate([chosenName] (const FCultData& cult) { return cult.Name.ToString() == chosenName; }))
+  {
+    nameIndex++;
+    chosenName = tempCoolNames[nameIndex];
+    tries++;
+  };
+
+  if(tries > maxTries)
+  {
+    UE_LOG(LogFollowersGameMode, Warning, TEXT("Unable to uniquely name new cult"));
+  }
+
+  newCult.Name = FText::FromString(tempCoolNames[nameIndex]);
+
+  // Generate unique random color
+  tries = 0;
+  maxTries = tempColors.Num();
+
+  int32 colorIndex = FMath::RandRange(0, tempColors.Num() - 1);
+  FLinearColor chosenColor = tempColors[colorIndex];
+
+  while(tries <= maxTries && AlreadyGeneratedCults.ContainsByPredicate([chosenColor] (const FCultData& cult) { return cult.Color == chosenColor; }))
+  {
+    colorIndex++;
+    chosenColor = tempColors[colorIndex];
+    tries++;
+  };
+
+  if(tries > maxTries)
+  {
+    UE_LOG(LogFollowersGameMode, Warning, TEXT("Unable to uniquely set cult color"));
+  }
+
+  newCult.Color = chosenColor;
+
+  // Create material instance dynamic
   if(FollowersGameState)
   {
     auto mid = UMaterialInstanceDynamic::Create(FollowersGameState->CultNPCPawnMaterialBase, (UObject*)this);

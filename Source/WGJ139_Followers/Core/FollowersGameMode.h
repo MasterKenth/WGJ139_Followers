@@ -31,5 +31,5 @@ protected:
 	void BeginRound();
 	void EndRound();
 
-	struct FCultData GenerateRandomCult() const;
+	struct FCultData GeneratePseudoRandomCult(const TArray<FCultData>& AlreadyGeneratedCults) const;
 };
