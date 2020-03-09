@@ -32,9 +32,11 @@ ABasePawn::ABasePawn()
 
 	AttackAnim = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("AttackAnim"));
 	AttackAnim->SetupAttachment(Sprite);
+	AttackAnim->SetCollisionProfileName(TEXT("NoCollision"));
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"));
 	HealthBar->SetupAttachment(Root);
+	HealthBar->SetCollisionProfileName(TEXT("NoCollision"));
 	HealthBar->SetRelativeLocation(FVector(0, -40, 0));
 	HealthBar->SetRelativeRotation(FRotator::MakeFromEuler(FVector(-90, 90, 0)));
 	HealthBar->SetDrawAtDesiredSize(true);
