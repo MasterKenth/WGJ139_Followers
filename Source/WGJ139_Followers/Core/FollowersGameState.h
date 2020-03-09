@@ -17,6 +17,12 @@ public:
 
 	UPROPERTY()
 	int32 Followers;
+
+	UPROPERTY()
+	FLinearColor Color;
+
+	UPROPERTY()
+	class UMaterialInstanceDynamic* PawnMID;
 };
 
 UCLASS()
@@ -27,6 +33,9 @@ class WGJ139_FOLLOWERS_API AFollowersGameState : public AGameStateBase
 public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ANPCPawn> NPCPawnClass;
+
+	UPROPERTY(EditAnywhere)
+	class UMaterialInterface* CultNPCPawnMaterialBase;
 
 	UPROPERTY()
 	TArray<FCultData> Cults;
