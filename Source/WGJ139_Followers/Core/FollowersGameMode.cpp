@@ -128,6 +128,7 @@ void AFollowersGameMode::BeginRound()
           {
             FollowersGameState->SpawnedFollowers.Add(newPawn);
             newPawn->SetMaterial(cult.PawnMID);
+            newPawn->SpawnDefaultController();
 
             FVector newLoc;
             FHitResult hit;
