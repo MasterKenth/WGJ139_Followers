@@ -59,6 +59,10 @@ void UBTTask_MoveToWithoutNav::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
       }
     }
   }
+  else
+  {
+    FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+  }
 }
 
 ANPCPawn* UBTTask_MoveToWithoutNav::GetNPCPawn(UBehaviorTreeComponent& OwnerComp) const
