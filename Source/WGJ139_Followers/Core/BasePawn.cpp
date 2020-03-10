@@ -3,6 +3,7 @@
 
 #include "BasePawn.h"
 #include "../UI/HealthBarWidget.h"
+#include "FollowersGameMode.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "Components/BoxComponent.h"
@@ -167,7 +168,18 @@ void ABasePawn::Kill(AActor* KilledBy)
 	Health = 0;
 	bDead = true;
 	Destroy();
-	UE_LOG(LogTemp, Log, TEXT("Dead by %s"), *KilledBy->GetName());
+
+	AFollowersGameMode* gameMode = GetWorld()->GetAuthGameMode<AFollowersGameMode>();
+	if(gameMode)
+	{
+		gameMode->AddFollowerForNextRound(CultID, -1);
+
+		ABasePawn* killer = Cast<ABasePawn>(KilledBy);
+		if(killer)
+		{
+			gameMode->AddFollowerForNextRound(killer->CultID, 1);
+		}
+	}
 }
 
 void ABasePawn::UpdateHealthBarDisplay()

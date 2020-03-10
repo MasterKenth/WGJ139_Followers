@@ -15,8 +15,8 @@ class WGJ139_FOLLOWERS_API AFollowersGameMode : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
-
 	FGameStartEvent& OnGameStart() { return GameStartEvent; }
+	void AddFollowerForNextRound(int32 CultID, int32 Add);
 	
 protected:
 	UPROPERTY()

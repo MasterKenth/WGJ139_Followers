@@ -15,6 +15,22 @@
 
 DEFINE_LOG_CATEGORY(LogFollowersGameMode);
 
+void AFollowersGameMode::AddFollowerForNextRound(int32 CultID, int32 Add)
+{
+  if(FollowersGameState)
+  {
+    FCultData* cult = FollowersGameState->Cults.FindByPredicate([CultID](FCultData& cult) { return cult.ID == CultID; });
+    if(cult)
+    {
+      cult->Followers += Add;
+    }
+    else
+    {
+      UE_LOG(LogFollowersGameMode, Warning, TEXT("No cult with id %d"), CultID);
+    }
+  }
+}
+
 void AFollowersGameMode::BeginPlay()
 {
   Super::BeginPlay();
