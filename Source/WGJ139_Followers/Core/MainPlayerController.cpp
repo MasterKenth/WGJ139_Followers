@@ -3,6 +3,9 @@
 
 #include "MainPlayerController.h"
 #include "MainPlayerPawn.h"
+#include "../UI/GameOverWidget.h"
+#include "Engine/World.h"
+#include "Camera/CameraComponent.h"
 
 AMainPlayerController::AMainPlayerController()
 {
@@ -27,9 +30,11 @@ void AMainPlayerController::OnPossess(APawn* aPawn)
 {
   Super::OnPossess(aPawn);
   MainPlayerPawn = Cast<AMainPlayerPawn>(aPawn);
-  UE_LOG(LogTemp, Log, TEXT("Possessed pawn? %d"), MainPlayerPawn != nullptr ? 1 : 0);
+  if(MainPlayerPawn)
+  {
+    MainPlayerPawn->OnDeath().AddUObject(this, &AMainPlayerController::OnPlayerKilled);
+  }
 }
-
 
 void AMainPlayerController::OnInput_MoveRight(float Value)
 {
@@ -53,5 +58,23 @@ void AMainPlayerController::OnInput_Attack()
   if(MainPlayerPawn != nullptr)
   {
     MainPlayerPawn->TryAttack();
+  }
+}
+
+void AMainPlayerController::OnPlayerKilled()
+{
+  UE_LOG(LogTemp, Log, TEXT("Game Over"));
+  if(GameOverWidgetClass)
+  {
+    GameOverWidget = CreateWidget<UGameOverWidget>(this, GameOverWidgetClass);
+    if(GameOverWidget)
+    {
+      GameOverWidget->AddToViewport();
+
+      FInputModeUIOnly newInputMode;
+      SetInputMode(newInputMode);
+
+      bShowMouseCursor = true;
+    }
   }
 }

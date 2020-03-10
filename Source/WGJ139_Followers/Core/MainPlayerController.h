@@ -15,11 +15,17 @@ class WGJ139_FOLLOWERS_API AMainPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UGameOverWidget> GameOverWidgetClass;
+
 	AMainPlayerController();
 
 protected:
 	UPROPERTY()
 	class AMainPlayerPawn* MainPlayerPawn;
+
+	UPROPERTY()
+	class UGameOverWidget* GameOverWidget;
 
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -28,4 +34,6 @@ protected:
 	void OnInput_MoveRight(float Value);
 	void OnInput_MoveUp(float Value);
 	void OnInput_Attack();
+
+	void OnPlayerKilled();
 };
