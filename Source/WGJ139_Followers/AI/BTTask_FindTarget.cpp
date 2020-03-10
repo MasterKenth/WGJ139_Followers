@@ -21,38 +21,46 @@ EBTNodeResult::Type UBTTask_FindTarget::ExecuteTask(UBehaviorTreeComponent& Owne
   UBlackboardComponent* blackboardComp = OwnerComp.GetBlackboardComponent();
   if(blackboardComp)
   {
-    ANPCController* npc = Cast<ANPCController>(OwnerComp.GetOwner());
-    if(npc)
+    ABasePawn* existingPawn = Cast<ABasePawn>(blackboardComp->GetValue<UBlackboardKeyType_Object>(BlackboardKey.GetSelectedKeyID()));
+    if(existingPawn && !existingPawn->IsDead())
     {
-      ANPCPawn* pawn = Cast<ANPCPawn>(npc->GetPawn());
-      if(pawn)
+      return EBTNodeResult::Succeeded;
+    }
+    else
+    {
+      ANPCController* npc = Cast<ANPCController>(OwnerComp.GetOwner());
+      if(npc)
       {
-        float closestDistance = 0;
-        ABasePawn* closestTarget = nullptr;
-        const FVector selfLocation = pawn->GetActorLocation();
-
-        TArray<ABasePawn*> bp;
-        for(TActorIterator<ABasePawn> itr(pawn->GetWorld()); itr; ++itr)
+        ANPCPawn* pawn = Cast<ANPCPawn>(npc->GetPawn());
+        if(pawn)
         {
-          bp.Add(*itr);
-          continue;
-          ABasePawn* possibleTarget = *itr;
-          if(possibleTarget->CultID != pawn->CultID)
+          float closestDistance = 0;
+          ABasePawn* closestTarget = nullptr;
+          const FVector selfLocation = pawn->GetActorLocation();
+
+          TArray<ABasePawn*> bp;
+          for(TActorIterator<ABasePawn> itr(pawn->GetWorld()); itr; ++itr)
           {
-            float distance = FVector::DistSquared2D(selfLocation, possibleTarget->GetActorLocation());
-            if(distance < closestDistance || !closestTarget)
+            bp.Add(*itr);
+            continue;
+            ABasePawn* possibleTarget = *itr;
+            if(possibleTarget->CultID != pawn->CultID)
             {
-              closestDistance = distance;
-              closestTarget = possibleTarget;
+              float distance = FVector::DistSquared2D(selfLocation, possibleTarget->GetActorLocation());
+              if(distance < closestDistance || !closestTarget)
+              {
+                closestDistance = distance;
+                closestTarget = possibleTarget;
+              }
             }
           }
-        }
 
-        if(bp.Num() > 0)//if(closestTarget)
-        {
-          //blackboardComp->SetValue<UBlackboardKeyType_Object>(BlackboardKey.GetSelectedKeyID(), closestTarget);
-          blackboardComp->SetValue<UBlackboardKeyType_Object>(BlackboardKey.GetSelectedKeyID(), bp[FMath::RandRange(0, bp.Num() - 1)]);
-          return EBTNodeResult::Succeeded;
+          if(bp.Num() > 0)//if(closestTarget)
+          {
+            //blackboardComp->SetValue<UBlackboardKeyType_Object>(BlackboardKey.GetSelectedKeyID(), closestTarget);
+            blackboardComp->SetValue<UBlackboardKeyType_Object>(BlackboardKey.GetSelectedKeyID(), bp[FMath::RandRange(0, bp.Num() - 1)]);
+            return EBTNodeResult::Succeeded;
+          }
         }
       }
     }
