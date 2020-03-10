@@ -43,7 +43,7 @@ public:
 	UPROPERTY(VisibleDefaultsOnly)
 	class UMainPawnMovementComponent* MainPawnMovementComponent;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	int32 CultID;
 	
 	ABasePawn();
