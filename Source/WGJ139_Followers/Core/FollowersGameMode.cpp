@@ -86,6 +86,7 @@ void AFollowersGameMode::SetupCults()
       if(playerPawn)
       {
         playerPawn->CultID = newCult.ID;
+        playerPawn->DynamicMaterialInstance->SetVectorParameterValue(TEXT("Color"), newCult.Color);
       }
     }
 
