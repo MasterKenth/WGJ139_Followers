@@ -57,6 +57,7 @@ public:
 	
 	virtual void TakeDamage(int32 Damage) override;
 	FDeathEvent& OnDeath() { return DeathEvent; }
+	bool IsDead() const { return bDead; }
 
 	void SetMaterial(class UMaterialInstanceDynamic* MID);
 
@@ -70,6 +71,7 @@ protected:
 	float LastAttackTime;
 	EPawnLookDir LookDir;
 
+	bool bDead;
 	int32 Health;
 	int32 MaxHealth;
 	FDeathEvent DeathEvent;

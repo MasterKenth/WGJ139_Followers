@@ -21,6 +21,7 @@ ABasePawn::ABasePawn()
 	LookDir = EPawnLookDir::Right;
 
 	Health = MaxHealth = 100;
+	bDead = false;
 
 	RootComponent = Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Root"));
 	Root->SetCollisionProfileName(TEXT("Pawn"));
@@ -144,8 +145,8 @@ void ABasePawn::TakeDamage(int32 Damage)
 
 	if(newHealth <= 0)
 	{
-		Kill();
 		DeathEvent.Broadcast();
+		Kill();
 	}
 }
 
@@ -161,6 +162,7 @@ void ABasePawn::BeginPlay()
 void ABasePawn::Kill()
 {
 	Health = 0;
+	bDead = true;
 	Destroy();
 	UE_LOG(LogTemp, Log, TEXT("Dead"));
 }
