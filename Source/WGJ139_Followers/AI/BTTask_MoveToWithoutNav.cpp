@@ -55,6 +55,7 @@ void UBTTask_MoveToWithoutNav::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
       {
         FVector dir = (targetLocation - currentLocation).GetSafeNormal2D();
         pawn->AddMovementInput(dir);
+        pawn->UpdateLookDir(dir.X);
       }
     }
   }
