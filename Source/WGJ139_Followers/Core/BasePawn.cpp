@@ -68,7 +68,10 @@ UPawnMovementComponent* ABasePawn::GetMovementComponent() const
 
 void ABasePawn::AddMovementInput(FVector WorldDirection, float ScaleValue, bool bForce)
 {
-	Super::AddMovementInput(WorldDirection, ScaleValue, bForce);
+	if(!bDead)
+	{
+		Super::AddMovementInput(WorldDirection, ScaleValue, bForce);
+	}
 }
 
 void ABasePawn::UpdateLookDir(float HorizontalInput)
