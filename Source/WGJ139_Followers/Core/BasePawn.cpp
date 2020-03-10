@@ -107,7 +107,11 @@ void ABasePawn::TryAttack()
 					IDamageableInterface* damageable = Cast<IDamageableInterface>(overlap.GetActor());
 					if(damageable != nullptr)
 					{
-						uniqueDamageables.AddUnique(damageable);
+						ABasePawn* pawn = Cast<ABasePawn>(overlap.GetActor());
+						if(!pawn || pawn->CultID != this->CultID)
+						{
+							uniqueDamageables.AddUnique(damageable);
+						}
 					}
 				}
 			}
