@@ -122,7 +122,7 @@ void ABasePawn::TryAttack()
 
 			for(IDamageableInterface* damageable : uniqueDamageables)
 			{
-					damageable->TakeDamage(15);
+					damageable->TakeDamage(15, this);
 			}
 		}
 
@@ -138,7 +138,7 @@ bool ABasePawn::CanAttack() const
 	return GetWorld()->GetTimeSeconds() - LastAttackTime >= AttackCooldown;
 }
 
-void ABasePawn::TakeDamage(int32 Damage)
+void ABasePawn::TakeDamage(int32 Damage, AActor* DamageInstigator)
 {
 	int32 newHealth = Health - Damage;
 
@@ -149,7 +149,7 @@ void ABasePawn::TakeDamage(int32 Damage)
 	if(newHealth <= 0)
 	{
 		DeathEvent.Broadcast();
-		Kill();
+		Kill(DamageInstigator);
 	}
 }
 
@@ -162,12 +162,12 @@ void ABasePawn::BeginPlay()
 	UpdateHealthBarDisplay();
 }
 
-void ABasePawn::Kill()
+void ABasePawn::Kill(AActor* KilledBy)
 {
 	Health = 0;
 	bDead = true;
 	Destroy();
-	UE_LOG(LogTemp, Log, TEXT("Dead"));
+	UE_LOG(LogTemp, Log, TEXT("Dead by %s"), *KilledBy->GetName());
 }
 
 void ABasePawn::UpdateHealthBarDisplay()

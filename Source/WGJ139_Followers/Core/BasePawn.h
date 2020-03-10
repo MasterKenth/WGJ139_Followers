@@ -55,7 +55,7 @@ public:
 	void TryAttack();
 	bool CanAttack() const;
 	
-	virtual void TakeDamage(int32 Damage) override;
+	virtual void TakeDamage(int32 Damage, AActor* DamageInstigator) override;
 	FDeathEvent& OnDeath() { return DeathEvent; }
 	bool IsDead() const { return bDead; }
 
@@ -77,7 +77,7 @@ protected:
 	FDeathEvent DeathEvent;
 
 	virtual void BeginPlay() override;
-	virtual void Kill();
+	virtual void Kill(AActor* KilledBy);
 	
 	void UpdateHealthBarDisplay();
 };

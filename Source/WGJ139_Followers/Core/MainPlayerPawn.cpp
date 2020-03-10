@@ -29,7 +29,7 @@ void AMainPlayerPawn::BeginPlay()
 	SetMaterial(UMaterialInstanceDynamic::Create(Sprite->GetMaterial(0), this));
 }
 
-void AMainPlayerPawn::Kill()
+void AMainPlayerPawn::Kill(AActor* KilledBy)
 {
 	// Just hide the player instead to preserve camera
 	Root->SetCollisionEnabled(ECollisionEnabled::NoCollision);

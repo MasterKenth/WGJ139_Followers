@@ -21,5 +21,5 @@ class WGJ139_FOLLOWERS_API IDamageableInterface
 	GENERATED_BODY()
 
 public:
-	virtual void TakeDamage(int32 Damage) = 0;
+	virtual void TakeDamage(int32 Damage, class AActor* DamageInstigator) = 0;
 };
