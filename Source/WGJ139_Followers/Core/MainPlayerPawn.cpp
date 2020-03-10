@@ -28,3 +28,12 @@ void AMainPlayerPawn::BeginPlay()
 	Super::BeginPlay();
 	SetMaterial(UMaterialInstanceDynamic::Create(Sprite->GetMaterial(0), this));
 }
+
+void AMainPlayerPawn::Kill()
+{
+	// Just hide the player instead to preserve camera
+	Root->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Sprite->SetVisibility(false);
+	Health = 0;
+	bDead = true;
+}
