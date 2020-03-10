@@ -226,7 +226,7 @@ FCultData AFollowersGameMode::GeneratePseudoRandomCult(const TArray<FCultData>& 
 
   while(tries <= maxTries && AlreadyGeneratedCults.ContainsByPredicate([chosenName] (const FCultData& cult) { return cult.Name.ToString() == chosenName; }))
   {
-    nameIndex++;
+    nameIndex = (nameIndex + 1) % tempCoolNames.Num();
     chosenName = tempCoolNames[nameIndex];
     tries++;
   };
@@ -247,7 +247,7 @@ FCultData AFollowersGameMode::GeneratePseudoRandomCult(const TArray<FCultData>& 
 
   while(tries <= maxTries && AlreadyGeneratedCults.ContainsByPredicate([chosenColor] (const FCultData& cult) { return cult.Color == chosenColor; }))
   {
-    colorIndex++;
+    colorIndex = (colorIndex + 1) % tempColors.Num();
     chosenColor = tempColors[colorIndex];
     tries++;
   };
