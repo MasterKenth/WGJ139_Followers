@@ -24,6 +24,8 @@ ABasePawn::ABasePawn()
 
 	Health = MaxHealth = 100;
 	bDead = false;
+	TakeDamageInvulnerabilityTime = 0.3f;
+	LastDamageTime = 0;
 
 	RootComponent = Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Root"));
 	Root->SetCollisionProfileName(TEXT("Pawn"));
@@ -142,31 +144,36 @@ bool ABasePawn::CanAttack() const
 
 void ABasePawn::TakeDamage(int32 Damage, AActor* DamageInstigator)
 {
-	int32 newHealth = Health - Damage;
-
-	Health = FMath::Clamp(newHealth, 0, MaxHealth);
-
-	UpdateHealthBarDisplay();
-
-	if(newHealth <= 0)
+	float currentWorldTime = GetWorld()->GetTimeSeconds();
+	if(currentWorldTime - LastDamageTime >= TakeDamageInvulnerabilityTime)
 	{
-		DeathEvent.Broadcast();
-		Kill(DamageInstigator);
-	}
-	else if(DynamicMaterialInstance)
-	{
-		DynamicMaterialInstance->SetScalarParameterValue(TEXT("BlinkAmount"), 1.0f);
+		int32 newHealth = Health - Damage;
 
-		auto stopBlinkDelegate = FTimerDelegate::CreateLambda([this]()
+		Health = FMath::Clamp(newHealth, 0, MaxHealth);
+		LastDamageTime = currentWorldTime;
+
+		UpdateHealthBarDisplay();
+
+		if(newHealth <= 0)
 		{
-			if(DynamicMaterialInstance)
-			{
-				DynamicMaterialInstance->SetScalarParameterValue(TEXT("BlinkAmount"), 0.0f);
-			}
-		});
+			DeathEvent.Broadcast();
+			Kill(DamageInstigator);
+		}
+		else if(DynamicMaterialInstance)
+		{
+			DynamicMaterialInstance->SetScalarParameterValue(TEXT("BlinkAmount"), 1.0f);
 
-		FTimerHandle handle;
-		GetWorldTimerManager().SetTimer(handle, stopBlinkDelegate, 0.3f, false);
+			auto stopBlinkDelegate = FTimerDelegate::CreateLambda([this]()
+			{
+				if(DynamicMaterialInstance)
+				{
+					DynamicMaterialInstance->SetScalarParameterValue(TEXT("BlinkAmount"), 0.0f);
+				}
+			});
+
+			FTimerHandle handle;
+			GetWorldTimerManager().SetTimer(handle, stopBlinkDelegate, TakeDamageInvulnerabilityTime, false);
+		}
 	}
 }
 

@@ -28,6 +28,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float AttackCooldown;
 
+	UPROPERTY(EditAnywhere)
+	float TakeDamageInvulnerabilityTime;
+
 	UPROPERTY(VisibleDefaultsOnly)
 	class UBoxComponent* Root;
 
@@ -77,6 +80,7 @@ protected:
 	int32 Health;
 	int32 MaxHealth;
 	FDeathEvent DeathEvent;
+	float LastDamageTime;
 
 	virtual void BeginPlay() override;
 	virtual void Kill(AActor* KilledBy);
