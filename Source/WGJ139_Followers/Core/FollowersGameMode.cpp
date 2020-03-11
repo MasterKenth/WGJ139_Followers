@@ -160,9 +160,15 @@ void AFollowersGameMode::BeginRound()
           if(newPawn)
           {
             FollowersGameState->SpawnedFollowers.Add(newPawn);
-            newPawn->SetMaterial(cult.PawnMID);
             newPawn->SpawnDefaultController();
             newPawn->CultID = cult.ID;
+
+            auto mid = UMaterialInstanceDynamic::Create(FollowersGameState->CultNPCPawnMaterialBase, (UObject*)this);
+            if(mid)
+            {
+              mid->SetVectorParameterValue(TEXT("Color"), cult.Color);
+              newPawn->SetMaterial(mid);
+            }
 
             FVector newLoc;
             FHitResult hit;
@@ -300,17 +306,6 @@ FCultData AFollowersGameMode::GeneratePseudoRandomCult(const TArray<FCultData>& 
   }
 
   newCult.Color = chosenColor;
-
-  // Create material instance dynamic
-  if(FollowersGameState)
-  {
-    auto mid = UMaterialInstanceDynamic::Create(FollowersGameState->CultNPCPawnMaterialBase, (UObject*)this);
-    if(mid)
-    {
-      mid->SetVectorParameterValue(TEXT("Color"), newCult.Color);
-      newCult.PawnMID = mid;
-    }
-  }
 
   return newCult;
 }

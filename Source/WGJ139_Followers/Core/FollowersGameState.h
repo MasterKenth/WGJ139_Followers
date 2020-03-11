@@ -23,9 +23,6 @@ public:
 
 	UPROPERTY()
 	FLinearColor Color;
-
-	UPROPERTY()
-	class UMaterialInstanceDynamic* PawnMID;
 };
 
 UCLASS()
