@@ -8,6 +8,7 @@
 #include "Engine/World.h"
 #include "Camera/CameraComponent.h"
 #include "FollowersGameMode.h"
+#include "GenericPlatform/GenericPlatformMisc.h"
 
 AMainPlayerController::AMainPlayerController()
 {
@@ -34,6 +35,7 @@ void AMainPlayerController::SetupInputComponent()
   InputComponent->BindAxis(TEXT("MoveRight"), this, &AMainPlayerController::OnInput_MoveRight);
   InputComponent->BindAxis(TEXT("MoveUp"), this, &AMainPlayerController::OnInput_MoveUp);
   InputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &AMainPlayerController::OnInput_Attack);
+  InputComponent->BindAction(TEXT("QuitGame"), EInputEvent::IE_Pressed, this, &AMainPlayerController::OnInput_QuitGame);
 }
 
 void AMainPlayerController::OnPossess(APawn* aPawn)
@@ -69,6 +71,12 @@ void AMainPlayerController::OnInput_Attack()
   {
     MainPlayerPawn->TryAttack();
   }
+}
+
+void AMainPlayerController::OnInput_QuitGame()
+{
+  UE_LOG(LogTemp, Log, TEXT("Bye!"));
+  FGenericPlatformMisc::RequestExit(false);
 }
 
 void AMainPlayerController::OnPlayerKilled()

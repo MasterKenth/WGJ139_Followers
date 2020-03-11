@@ -40,6 +40,7 @@ protected:
 	void OnInput_MoveRight(float Value);
 	void OnInput_MoveUp(float Value);
 	void OnInput_Attack();
+	void OnInput_QuitGame();
 
 	void OnPlayerKilled();
 
