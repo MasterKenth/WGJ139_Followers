@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// © Master Kenth 2020
 
 using UnrealBuildTool;
 using System.Collections.Generic;
