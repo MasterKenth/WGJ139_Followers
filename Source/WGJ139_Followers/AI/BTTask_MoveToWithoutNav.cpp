@@ -48,7 +48,7 @@ void UBTTask_MoveToWithoutNav::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
     {
       FVector currentLocation = pawn->GetActorLocation();
       FVector targetLocation = targetPawn->GetActorLocation();
-      if(FVector::DistSquared2D(currentLocation, targetLocation) < pawnMovement->BaseMoveSpeed * pawnMovement->BaseMoveSpeed)
+      if(FVector::DistSquared2D(currentLocation, targetLocation) < 75 * 75)
       {
         FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
       }
