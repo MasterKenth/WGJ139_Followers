@@ -43,6 +43,7 @@ protected:
 
 	void OnPlayerKilled();
 
+	void OnGameStart();
 	void OnRoundBegin();
 	void OnRoundEnd();
 };

@@ -20,6 +20,7 @@ public:
 	class UCameraComponent* Camera;
 
 	AMainPlayerPawn();
+	void Reincarnate();
 
 protected:
 	virtual void BeginPlay() override;

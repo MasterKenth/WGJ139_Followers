@@ -7,6 +7,7 @@
 #include "../Core/FollowersGameState.h"
 #include "Engine/World.h"
 #include "Components/HorizontalBox.h"
+#include "../Core/FollowersGameMode.h"
 
 void UGameOverWidget::NativeConstruct()
 {
@@ -42,6 +43,15 @@ void UGameOverWidget::NativeConstruct()
   }
   if(RetryButton)
   {
-    // TODO: retry game
+    RetryButton->OnClicked.AddDynamic(this, &UGameOverWidget::OnRetryClicked);
+  }
+}
+
+void UGameOverWidget::OnRetryClicked()
+{
+  AFollowersGameMode* gameMode = GetWorld()->GetAuthGameMode<AFollowersGameMode>();
+  if(gameMode)
+  {
+    gameMode->StartGame();
   }
 }

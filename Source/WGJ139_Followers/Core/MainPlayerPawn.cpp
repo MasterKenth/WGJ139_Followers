@@ -29,6 +29,14 @@ void AMainPlayerPawn::BeginPlay()
 	SetMaterial(UMaterialInstanceDynamic::Create(Sprite->GetMaterial(0), this));
 }
 
+void AMainPlayerPawn::Reincarnate()
+{
+	Root->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	Sprite->SetVisibility(true);
+	Health = MaxHealth;
+	bDead = false;
+}
+
 void AMainPlayerPawn::Kill(AActor* KilledBy)
 {
 	// Just hide the player instead to preserve camera

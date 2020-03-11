@@ -22,6 +22,7 @@ public:
 	FRoundEndEvent& OnRoundEnd() { return RoundEndEvent; }
 	void AddFollowerForNextRound(int32 CultID, int32 Add);
 
+	void StartGame();
 	void StopGameplay();
 	
 protected:
@@ -34,7 +35,6 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	void StartGame();
 	void SetupCults();
 	void BeginRound();
 	void EndRound();

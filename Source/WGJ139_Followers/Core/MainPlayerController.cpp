@@ -21,6 +21,7 @@ void AMainPlayerController::BeginPlay()
   AFollowersGameMode* gameMode = GetWorld()->GetAuthGameMode<AFollowersGameMode>();
   if(gameMode)
   {
+    gameMode->OnGameStart().AddUObject(this, &AMainPlayerController::OnGameStart);
     gameMode->OnRoundBegin().AddUObject(this, &AMainPlayerController::OnRoundBegin);
     gameMode->OnRoundEnd().AddUObject(this, &AMainPlayerController::OnRoundEnd);
   }
@@ -92,6 +93,24 @@ void AMainPlayerController::OnPlayerKilled()
   {
     gameMode->StopGameplay();
   }
+}
+
+void AMainPlayerController::OnGameStart()
+{
+  if(GameOverWidget)
+  {
+    GameOverWidget->RemoveFromViewport();
+    GameOverWidget = nullptr;
+  }
+
+  if(MainPlayerPawn)
+  {
+    MainPlayerPawn->Reincarnate();
+    FInputModeGameOnly newInputMode;
+    SetInputMode(newInputMode);
+  }
+
+  bShowMouseCursor = false;
 }
 
 void AMainPlayerController::OnRoundBegin()

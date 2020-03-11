@@ -71,8 +71,17 @@ void AFollowersGameMode::StartGame()
 
     if(FollowersGameState)
     {
-      SetupCults();
+      for(ANPCPawn* pawn : FollowersGameState->SpawnedFollowers)
+      {
+        if(pawn)
+        {
+          pawn->Destroy();
+        }
+      }
+      FollowersGameState->SpawnedFollowers.Empty();
       FollowersGameState->CurrentRound = 0;
+
+      SetupCults();
 
       GameStartEvent.Broadcast();
 
