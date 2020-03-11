@@ -4,8 +4,10 @@
 #include "MainPlayerController.h"
 #include "MainPlayerPawn.h"
 #include "../UI/GameOverWidget.h"
+#include "../UI/RoundResultWidget.h"
 #include "Engine/World.h"
 #include "Camera/CameraComponent.h"
+#include "FollowersGameMode.h"
 
 AMainPlayerController::AMainPlayerController()
 {
@@ -15,6 +17,13 @@ AMainPlayerController::AMainPlayerController()
 void AMainPlayerController::BeginPlay()
 {
   Super::BeginPlay();
+
+  AFollowersGameMode* gameMode = GetWorld()->GetAuthGameMode<AFollowersGameMode>();
+  if(gameMode)
+  {
+    gameMode->OnRoundBegin().AddUObject(this, &AMainPlayerController::OnRoundBegin);
+    gameMode->OnRoundEnd().AddUObject(this, &AMainPlayerController::OnRoundEnd);
+  }
 }
 
 void AMainPlayerController::SetupInputComponent()
@@ -75,6 +84,27 @@ void AMainPlayerController::OnPlayerKilled()
       SetInputMode(newInputMode);
 
       bShowMouseCursor = true;
+    }
+  }
+}
+
+void AMainPlayerController::OnRoundBegin()
+{
+  if(RoundResultWidget)
+  {
+    RoundResultWidget->RemoveFromViewport();
+  } 
+}
+
+void AMainPlayerController::OnRoundEnd()
+{
+  if(RoundResultWidgetClass)
+  {
+    RoundResultWidget = CreateWidget<URoundResultWidget>(this, RoundResultWidgetClass);
+    if(RoundResultWidget)
+    {
+      RoundResultWidget->UpdateCultsDisplay();
+      RoundResultWidget->AddToViewport();
     }
   }
 }

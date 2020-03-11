@@ -18,6 +18,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UGameOverWidget> GameOverWidgetClass;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class URoundResultWidget> RoundResultWidgetClass;
+
 	AMainPlayerController();
 
 protected:
@@ -26,6 +29,9 @@ protected:
 
 	UPROPERTY()
 	class UGameOverWidget* GameOverWidget;
+
+	UPROPERTY()
+	class URoundResultWidget* RoundResultWidget;
 
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -36,4 +42,7 @@ protected:
 	void OnInput_Attack();
 
 	void OnPlayerKilled();
+
+	void OnRoundBegin();
+	void OnRoundEnd();
 };
