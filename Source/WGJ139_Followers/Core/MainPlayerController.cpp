@@ -89,7 +89,7 @@ void AMainPlayerController::OnPlayerKilled()
     {
       GameOverWidget->AddToViewport();
 
-      FInputModeUIOnly newInputMode;
+      FInputModeGameAndUI newInputMode;
       SetInputMode(newInputMode);
 
       bShowMouseCursor = true;
