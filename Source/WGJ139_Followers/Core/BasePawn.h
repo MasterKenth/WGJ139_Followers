@@ -59,6 +59,7 @@ public:
 	bool CanAttack() const;
 	
 	virtual void TakeDamage(int32 Damage, AActor* DamageInstigator) override;
+	void SetHealth(int32 NewHealth);
 	FDeathEvent& OnDeath() { return DeathEvent; }
 	bool IsDead() const { return bDead; }
 

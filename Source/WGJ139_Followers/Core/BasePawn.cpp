@@ -154,6 +154,12 @@ void ABasePawn::TakeDamage(int32 Damage, AActor* DamageInstigator)
 	}
 }
 
+void ABasePawn::SetHealth(int32 NewHealth)
+{
+	Health = FMath::Clamp(NewHealth, 0, MaxHealth);
+	UpdateHealthBarDisplay();
+}
+
 void ABasePawn::BeginPlay()
 {
 	Super::BeginPlay();
