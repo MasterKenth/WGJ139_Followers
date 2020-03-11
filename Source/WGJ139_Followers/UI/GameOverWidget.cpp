@@ -8,6 +8,7 @@
 #include "Engine/World.h"
 #include "Components/HorizontalBox.h"
 #include "../Core/FollowersGameMode.h"
+#include "TimerManager.h"
 
 void UGameOverWidget::NativeConstruct()
 {
@@ -44,6 +45,12 @@ void UGameOverWidget::NativeConstruct()
   if(RetryButton)
   {
     RetryButton->OnClicked.AddDynamic(this, &UGameOverWidget::OnRetryClicked);
+    RetryButton->SetIsEnabled(false);
+    FTimerHandle handle;
+    GetWorld()->GetTimerManager().SetTimer(handle, FTimerDelegate::CreateLambda([this]()
+    {
+      RetryButton->SetIsEnabled(true);
+    }), 1.0f, false);
   }
 }
 
