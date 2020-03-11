@@ -116,16 +116,6 @@ void AFollowersGameMode::SetupCults()
 
       followersGenerated += newFollowers;
     }
-
-    UE_LOG(LogFollowersGameMode, Log, TEXT("-------------- SetupCults --------------"));
-    UE_LOG(LogFollowersGameMode, Log, TEXT("Cults: %d"), FollowersGameState->Cults.Num());
-    int32 accumTotalFollowers = 0;
-    for(int32 i = 0; i < FollowersGameState->Cults.Num(); i++)
-    {
-      FCultData& cult = FollowersGameState->Cults[i];
-      accumTotalFollowers += cult.Followers;
-      UE_LOG(LogFollowersGameMode, Log, TEXT("\t#%d \t%2d/%3d followers: \t%s \tcolor: %s"), i, cult.Followers, accumTotalFollowers, *cult.Name.ToString(), *cult.Color.ToString());
-    }
   }
 }
 
@@ -150,7 +140,10 @@ void AFollowersGameMode::BeginRound()
       
       for(int32 c = 0; c < FollowersGameState->Cults.Num(); c++)
       {
-        const FCultData& cult = FollowersGameState->Cults[c];
+        FCultData& cult = FollowersGameState->Cults[c];
+        UE_LOG(LogFollowersGameMode, Log, TEXT("round=#%d cult=%d f=%d (last: %d) %s"), FollowersGameState->CurrentRound, cult.ID, cult.Followers, cult.LastRoundFollowerCount, *cult.Name.ToString());
+
+        cult.LastRoundFollowerCount = cult.Followers;
 
         const int32 followersToGenerate = (c == 0) ? cult.Followers - 1 : cult.Followers; // Skip first follower of cult #0 (the player)
         
@@ -285,6 +278,7 @@ FCultData AFollowersGameMode::GeneratePseudoRandomCult(const TArray<FCultData>& 
   }
 
   newCult.Name = FText::FromString(tempCoolNames[nameIndex]);
+  newCult.LastRoundFollowerCount = 0;
 
   // Generate unique random color
   tries = 0;

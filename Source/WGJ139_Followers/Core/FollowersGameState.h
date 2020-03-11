@@ -22,6 +22,9 @@ public:
 	int32 Followers;
 
 	UPROPERTY()
+	int32 LastRoundFollowerCount;
+
+	UPROPERTY()
 	FLinearColor Color;
 };
 
