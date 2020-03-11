@@ -20,26 +20,25 @@ void UGameOverWidget::NativeConstruct()
       countText->SetText(FText::AsNumber(followers));
     }
 
-  if(FailedTextContainer && OneFollowerTextContainer && ManyFollowersTextContainer)
-  {
-    FailedTextContainer->SetVisibility(ESlateVisibility::Collapsed);
-    OneFollowerTextContainer->SetVisibility(ESlateVisibility::Collapsed);
-    ManyFollowersTextContainer->SetVisibility(ESlateVisibility::Collapsed);
-    
-    if(followers == 0)
+    if(FailedTextContainer && OneFollowerTextContainer && ManyFollowersTextContainer)
     {
-      FailedTextContainer->SetVisibility(ESlateVisibility::Visible);
+      FailedTextContainer->SetVisibility(ESlateVisibility::Collapsed);
+      OneFollowerTextContainer->SetVisibility(ESlateVisibility::Collapsed);
+      ManyFollowersTextContainer->SetVisibility(ESlateVisibility::Collapsed);
+      
+      if(followers == 0)
+      {
+        FailedTextContainer->SetVisibility(ESlateVisibility::Visible);
+      }
+      else if(followers == 1)
+      {
+        OneFollowerTextContainer->SetVisibility(ESlateVisibility::Visible);
+      }
+      else
+      {
+        ManyFollowersTextContainer->SetVisibility(ESlateVisibility::Visible);
+      }
     }
-    else if(followers == 1)
-    {
-      OneFollowerTextContainer->SetVisibility(ESlateVisibility::Visible);
-    }
-    else
-    {
-      ManyFollowersTextContainer->SetVisibility(ESlateVisibility::Visible);
-    }
-  }
-
   }
   if(RetryButton)
   {
