@@ -37,17 +37,25 @@ EBTNodeResult::Type UBTTask_FindTarget::ExecuteTask(UBehaviorTreeComponent& Owne
           float closestDistance = 0;
           ABasePawn* closestTarget = nullptr;
           const FVector selfLocation = pawn->GetActorLocation();
-          
-          for(TActorIterator<ABasePawn> itr(pawn->GetWorld()); itr; ++itr)
+
+          ABasePawn* playerPawn = GetWorld()->GetFirstPlayerController()->GetPawn<ABasePawn>();
+          if(playerPawn && pawn->CultID != playerPawn->CultID && FMath::RandRange(0.0f, 1.0f) <= 0.1f) // 10% chance to always target player
           {
-            ABasePawn* possibleTarget = *itr;
-            if(possibleTarget->CultID != pawn->CultID)
+            closestTarget = playerPawn;
+          }
+          else
+          {
+            for(TActorIterator<ABasePawn> itr(pawn->GetWorld()); itr; ++itr)
             {
-              float distance = FVector::DistSquared2D(selfLocation, possibleTarget->GetActorLocation());
-              if(distance < closestDistance || !closestTarget)
+              ABasePawn* possibleTarget = *itr;
+              if(possibleTarget->CultID != pawn->CultID)
               {
-                closestDistance = distance;
-                closestTarget = possibleTarget;
+                float distance = FVector::DistSquared2D(selfLocation, possibleTarget->GetActorLocation());
+                if(distance < closestDistance || !closestTarget)
+                {
+                  closestDistance = distance;
+                  closestTarget = possibleTarget;
+                }
               }
             }
           }
