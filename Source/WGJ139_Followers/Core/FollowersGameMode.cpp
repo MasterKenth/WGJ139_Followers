@@ -195,6 +195,8 @@ void AFollowersGameMode::BeginRound()
 
     GetWorldTimerManager().SetTimer(FollowersGameState->RoundEndHandle, this, &AFollowersGameMode::EndRound, 20.0f, false);
   }
+
+  RoundBeginEvent.Broadcast();
 }
 
 void AFollowersGameMode::EndRound()
@@ -215,6 +217,8 @@ void AFollowersGameMode::EndRound()
 
     GetWorldTimerManager().SetTimer(FollowersGameState->NextRoundBeginHandle, this, &AFollowersGameMode::BeginRound, 5.0f, false);
   }
+
+  RoundEndEvent.Broadcast();
 }
 
 FCultData AFollowersGameMode::GeneratePseudoRandomCult(const TArray<FCultData>& AlreadyGeneratedCults) const

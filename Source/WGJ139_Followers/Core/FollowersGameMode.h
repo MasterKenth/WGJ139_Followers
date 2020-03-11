@@ -8,6 +8,8 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogFollowersGameMode, Log, All);
 DECLARE_EVENT(AFollowersGameMode, FGameStartEvent);
+DECLARE_EVENT(AFollowersGameMode, FRoundBeginEvent);
+DECLARE_EVENT(AFollowersGameMode, FRoundEndEvent);
 
 UCLASS()
 class WGJ139_FOLLOWERS_API AFollowersGameMode : public AGameModeBase
@@ -16,6 +18,8 @@ class WGJ139_FOLLOWERS_API AFollowersGameMode : public AGameModeBase
 	
 public:
 	FGameStartEvent& OnGameStart() { return GameStartEvent; }
+	FRoundBeginEvent& OnRoundBegin() { return RoundBeginEvent; }
+	FRoundEndEvent& OnRoundEnd() { return RoundEndEvent; }
 	void AddFollowerForNextRound(int32 CultID, int32 Add);
 	
 protected:
@@ -23,6 +27,8 @@ protected:
 	class AFollowersGameState* FollowersGameState;
 
 	FGameStartEvent GameStartEvent;
+	FRoundBeginEvent RoundBeginEvent;
+	FRoundEndEvent RoundEndEvent;
 
 	virtual void BeginPlay() override;
 
