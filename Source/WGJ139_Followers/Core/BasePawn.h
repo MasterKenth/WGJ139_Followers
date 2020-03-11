@@ -60,6 +60,7 @@ public:
 	
 	virtual void TakeDamage(int32 Damage, AActor* DamageInstigator) override;
 	void SetHealth(int32 NewHealth);
+	int32 GetMaxHealth() const { return MaxHealth; }
 	FDeathEvent& OnDeath() { return DeathEvent; }
 	bool IsDead() const { return bDead; }
 
