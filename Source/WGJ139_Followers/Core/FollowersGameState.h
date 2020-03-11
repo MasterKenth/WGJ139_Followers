@@ -57,4 +57,7 @@ public:
 
 	UPROPERTY()
 	FTimerHandle NextRoundBeginHandle;
+
+	UPROPERTY()
+	bool bWonGame;
 };

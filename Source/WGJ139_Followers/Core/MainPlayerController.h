@@ -47,4 +47,7 @@ protected:
 	void OnGameStart();
 	void OnRoundBegin();
 	void OnRoundEnd();
+	void OnGameWon();
+
+	void ShowGameOverUI();
 };

@@ -20,11 +20,12 @@ void UGameOverWidget::NativeConstruct()
       countText->SetText(FText::AsNumber(followers));
     }
 
-    if(FailedTextContainer && OneFollowerTextContainer && ManyFollowersTextContainer)
+    if(FailedTextContainer && OneFollowerTextContainer && ManyFollowersTextContainer && WonTextContainer)
     {
       FailedTextContainer->SetVisibility(ESlateVisibility::Collapsed);
       OneFollowerTextContainer->SetVisibility(ESlateVisibility::Collapsed);
       ManyFollowersTextContainer->SetVisibility(ESlateVisibility::Collapsed);
+      WonTextContainer->SetVisibility(ESlateVisibility::Collapsed);
       
       if(followers == 0)
       {
@@ -43,6 +44,27 @@ void UGameOverWidget::NativeConstruct()
   if(RetryButton)
   {
     RetryButton->OnClicked.AddDynamic(this, &UGameOverWidget::OnRetryClicked);
+  }
+}
+
+void UGameOverWidget::SetAsWon()
+{
+  if(TitleText)
+  {
+    TitleText->SetText(FText::FromString(TEXT("YOU WON")));
+  }
+
+  if(FailedTextContainer && OneFollowerTextContainer && ManyFollowersTextContainer && WonTextContainer)
+  {
+    FailedTextContainer->SetVisibility(ESlateVisibility::Collapsed);
+    OneFollowerTextContainer->SetVisibility(ESlateVisibility::Collapsed);
+    ManyFollowersTextContainer->SetVisibility(ESlateVisibility::Collapsed);
+    WonTextContainer->SetVisibility(ESlateVisibility::Visible);
+  }
+
+  if(RetryButtonText)
+  {
+    RetryButtonText->SetText(FText::FromString(TEXT("REIGN OVER A NEW DOMAIN")));
   }
 }
 

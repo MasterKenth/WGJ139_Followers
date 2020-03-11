@@ -26,9 +26,20 @@ public:
 	
 	UPROPERTY(EditAnywhere, meta=(BindWidget))
 	class UHorizontalBox* ManyFollowersTextContainer;
+	
+	UPROPERTY(EditAnywhere, meta=(BindWidget))
+	class UHorizontalBox* WonTextContainer;
+
+	UPROPERTY(EditAnywhere, meta=(BindWidget))
+	class UTextBlock* TitleText;
+	
+	UPROPERTY(EditAnywhere, meta=(BindWidget))
+	class UTextBlock* RetryButtonText;
 
 	UPROPERTY(EditAnywhere, meta=(BindWidget))
 	class UButton* RetryButton;
+
+	void SetAsWon();
 
 protected:
 	virtual void NativeConstruct() override;

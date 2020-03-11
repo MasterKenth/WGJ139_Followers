@@ -25,6 +25,7 @@ void AMainPlayerController::BeginPlay()
     gameMode->OnGameStart().AddUObject(this, &AMainPlayerController::OnGameStart);
     gameMode->OnRoundBegin().AddUObject(this, &AMainPlayerController::OnRoundBegin);
     gameMode->OnRoundEnd().AddUObject(this, &AMainPlayerController::OnRoundEnd);
+    gameMode->OnGameWon().AddUObject(this, &AMainPlayerController::OnGameWon);
   }
 }
 
@@ -82,19 +83,7 @@ void AMainPlayerController::OnInput_QuitGame()
 void AMainPlayerController::OnPlayerKilled()
 {
   UE_LOG(LogTemp, Log, TEXT("Game Over"));
-  if(GameOverWidgetClass)
-  {
-    GameOverWidget = CreateWidget<UGameOverWidget>(this, GameOverWidgetClass);
-    if(GameOverWidget)
-    {
-      GameOverWidget->AddToViewport();
-
-      FInputModeGameAndUI newInputMode;
-      SetInputMode(newInputMode);
-
-      bShowMouseCursor = true;
-    }
-  }
+  ShowGameOverUI();
 
   AFollowersGameMode* gameMode = GetWorld()->GetAuthGameMode<AFollowersGameMode>();
   if(gameMode)
@@ -131,13 +120,40 @@ void AMainPlayerController::OnRoundBegin()
 
 void AMainPlayerController::OnRoundEnd()
 {
-  if(RoundResultWidgetClass)
+  if(RoundResultWidgetClass && !GameOverWidget)
   {
     RoundResultWidget = CreateWidget<URoundResultWidget>(this, RoundResultWidgetClass);
     if(RoundResultWidget)
     {
       RoundResultWidget->UpdateCultsDisplay();
       RoundResultWidget->AddToViewport();
+    }
+  }
+}
+
+void AMainPlayerController::OnGameWon()
+{
+  ShowGameOverUI();
+  if(GameOverWidget)
+  {
+    GameOverWidget->SetAsWon();
+  }
+}
+
+void AMainPlayerController::ShowGameOverUI()
+{
+  UE_LOG(LogTemp, Log, TEXT("ShowGameOverUI"));
+  if(GameOverWidgetClass)
+  {
+    GameOverWidget = CreateWidget<UGameOverWidget>(this, GameOverWidgetClass);
+    if(GameOverWidget)
+    {
+      GameOverWidget->AddToViewport();
+
+      FInputModeGameAndUI newInputMode;
+      SetInputMode(newInputMode);
+
+      bShowMouseCursor = true;
     }
   }
 }

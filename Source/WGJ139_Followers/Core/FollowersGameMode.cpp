@@ -28,6 +28,19 @@ void AFollowersGameMode::AddFollowerForNextRound(int32 CultID, int32 Add)
     {
       UE_LOG(LogFollowersGameMode, Warning, TEXT("No cult with id %d"), CultID);
     }
+    
+    if(!FollowersGameState->bWonGame)
+    {
+      int32 playerCultID = FollowersGameState->Cults[0].ID;
+      bool bAnyEnemyCultLeft = FollowersGameState->Cults.ContainsByPredicate([playerCultID](const FCultData& cult){ return cult.Followers > 0 && cult.ID != playerCultID; });
+      
+      if(!bAnyEnemyCultLeft)
+      {
+        FollowersGameState->bWonGame = true;
+        StopGameplay();
+        GameWonEvent.Broadcast();
+      }
+    }
   }
 }
 
@@ -80,6 +93,7 @@ void AFollowersGameMode::StartGame()
       }
       FollowersGameState->SpawnedFollowers.Empty();
       FollowersGameState->CurrentRound = 0;
+      FollowersGameState->bWonGame = false;
 
       SetupCults();
 
@@ -109,8 +123,8 @@ void AFollowersGameMode::SetupCults()
     }
 
     // Generate NPC cults
-    const int32 totalFollowersToGenerate = 99;
-    const int32 numNPCCults = FMath::RandRange(2, 5);
+    const int32 totalFollowersToGenerate = 3;
+    const int32 numNPCCults = 1;//FMath::RandRange(2, 5);
     int32 followersGenerated = 0;
     for(int32 i = 0; i < numNPCCults; i++)
     {
