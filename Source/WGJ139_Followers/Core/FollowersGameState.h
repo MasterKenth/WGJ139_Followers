@@ -51,4 +51,10 @@ public:
 
 	UPROPERTY()
 	int32 CurrentRound;
+
+	UPROPERTY()
+	FTimerHandle RoundEndHandle;
+
+	UPROPERTY()
+	FTimerHandle NextRoundBeginHandle;
 };

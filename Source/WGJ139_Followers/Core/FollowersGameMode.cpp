@@ -135,6 +135,14 @@ void AFollowersGameMode::BeginRound()
   {
     UE_LOG(LogFollowersGameMode, Log, TEXT("BeginRound %d"), FollowersGameState->CurrentRound);
 
+    // Reset player
+    ABasePawn* playerPawn = GetWorld()->GetFirstPlayerController()->GetPawn<ABasePawn>();
+    if(playerPawn)
+    {
+      playerPawn->SetHealth(playerPawn->GetMaxHealth());
+      playerPawn->SetActorLocation(FVector::ZeroVector);
+    }
+
     // Spawn NPCs
     if(FollowersGameState->ArenaSpawnVolume && FollowersGameState->NPCPawnClass)
     {
@@ -185,12 +193,29 @@ void AFollowersGameMode::BeginRound()
         }
       }
     }
+
+    GetWorldTimerManager().SetTimer(FollowersGameState->RoundEndHandle, this, &AFollowersGameMode::EndRound, 20.0f, false);
   }
 }
 
 void AFollowersGameMode::EndRound()
 {
+  if(FollowersGameState)
+  {
+    UE_LOG(LogFollowersGameMode, Log, TEXT("EndRound %d"), FollowersGameState->CurrentRound);
+    FollowersGameState->CurrentRound++;
 
+    for(ABasePawn* pawn : FollowersGameState->SpawnedFollowers)
+    {
+      if(pawn != nullptr && pawn->IsValidLowLevel())
+      {
+        pawn->Destroy();
+      }
+    }
+    FollowersGameState->SpawnedFollowers.Empty();
+
+    GetWorldTimerManager().SetTimer(FollowersGameState->NextRoundBeginHandle, this, &AFollowersGameMode::BeginRound, 5.0f, false);
+  }
 }
 
 FCultData AFollowersGameMode::GeneratePseudoRandomCult(const TArray<FCultData>& AlreadyGeneratedCults) const
