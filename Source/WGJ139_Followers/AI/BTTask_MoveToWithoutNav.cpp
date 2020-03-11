@@ -9,6 +9,7 @@
 #include "../Gameplay/NPCPawn.h"
 #include "../Gameplay/NPCController.h"
 #include "../Core/MainPawnMovementComponent.h"
+#include "DrawDebugHelpers.h"
 
 
 UBTTask_MoveToWithoutNav::UBTTask_MoveToWithoutNav()
@@ -40,7 +41,7 @@ void UBTTask_MoveToWithoutNav::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
 {
   ANPCPawn* pawn = GetNPCPawn(OwnerComp);
   ABasePawn* targetPawn = GetTargetPawn(OwnerComp);
-  if(pawn && targetPawn)
+  if(pawn && targetPawn && !pawn->IsDead() && !targetPawn->IsDead())
   {
     UMainPawnMovementComponent* pawnMovement = Cast<UMainPawnMovementComponent>(pawn->GetMovementComponent());
     if(pawnMovement)
