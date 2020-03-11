@@ -12,6 +12,7 @@
 #include "PaperFlipbookComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "TimerManager.h"
 
 ABasePawn::ABasePawn()
 {
@@ -151,6 +152,21 @@ void ABasePawn::TakeDamage(int32 Damage, AActor* DamageInstigator)
 	{
 		DeathEvent.Broadcast();
 		Kill(DamageInstigator);
+	}
+	else if(DynamicMaterialInstance)
+	{
+		DynamicMaterialInstance->SetScalarParameterValue(TEXT("BlinkAmount"), 1.0f);
+
+		auto stopBlinkDelegate = FTimerDelegate::CreateLambda([this]()
+		{
+			if(DynamicMaterialInstance)
+			{
+				DynamicMaterialInstance->SetScalarParameterValue(TEXT("BlinkAmount"), 0.0f);
+			}
+		});
+
+		FTimerHandle handle;
+		GetWorldTimerManager().SetTimer(handle, stopBlinkDelegate, 0.3f, false);
 	}
 }
 
