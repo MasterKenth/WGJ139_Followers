@@ -37,12 +37,9 @@ EBTNodeResult::Type UBTTask_FindTarget::ExecuteTask(UBehaviorTreeComponent& Owne
           float closestDistance = 0;
           ABasePawn* closestTarget = nullptr;
           const FVector selfLocation = pawn->GetActorLocation();
-
-          TArray<ABasePawn*> bp;
+          
           for(TActorIterator<ABasePawn> itr(pawn->GetWorld()); itr; ++itr)
           {
-            bp.Add(*itr);
-            continue;
             ABasePawn* possibleTarget = *itr;
             if(possibleTarget->CultID != pawn->CultID)
             {
@@ -55,10 +52,9 @@ EBTNodeResult::Type UBTTask_FindTarget::ExecuteTask(UBehaviorTreeComponent& Owne
             }
           }
 
-          if(bp.Num() > 0)//if(closestTarget)
+          if(closestTarget)
           {
-            //blackboardComp->SetValue<UBlackboardKeyType_Object>(BlackboardKey.GetSelectedKeyID(), closestTarget);
-            blackboardComp->SetValue<UBlackboardKeyType_Object>(BlackboardKey.GetSelectedKeyID(), bp[FMath::RandRange(0, bp.Num() - 1)]);
+            blackboardComp->SetValue<UBlackboardKeyType_Object>(BlackboardKey.GetSelectedKeyID(), closestTarget);
             return EBTNodeResult::Succeeded;
           }
         }
