@@ -26,12 +26,18 @@ void URoundResultWidget::UpdateCultsDisplay()
 
     if(gameState && CultEntryWidgetTemplate)
     {
-      for(const FCultData& cult : gameState->Cults)
+      for(int32 i = 0; i < gameState->Cults.Num(); i++)
       {
+        const FCultData& cult = gameState->Cults[i];
         UCultEntryWidget* cultEntry = CreateWidget<UCultEntryWidget>(this, CultEntryWidgetTemplate);
         if(cultEntry)
         {
-          cultEntry->SetData(cult.Name, cult.Color, cult.Followers, cult.Followers - cult.LastRoundFollowerCount);
+          FText nameText = cult.Name;
+          if(i == 0)
+          {
+            nameText = FText::FromString(FString::Printf(TEXT("(you) %s"), *cult.Name.ToString()));
+          }
+          cultEntry->SetData(nameText, cult.Color, cult.Followers, cult.Followers - cult.LastRoundFollowerCount);
           CultsContainer->AddChild(cultEntry);
         }
       }
