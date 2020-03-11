@@ -21,6 +21,8 @@ public:
 	FRoundBeginEvent& OnRoundBegin() { return RoundBeginEvent; }
 	FRoundEndEvent& OnRoundEnd() { return RoundEndEvent; }
 	void AddFollowerForNextRound(int32 CultID, int32 Add);
+
+	void StopGameplay();
 	
 protected:
 	UPROPERTY()

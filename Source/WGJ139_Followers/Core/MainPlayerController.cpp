@@ -86,6 +86,12 @@ void AMainPlayerController::OnPlayerKilled()
       bShowMouseCursor = true;
     }
   }
+
+  AFollowersGameMode* gameMode = GetWorld()->GetAuthGameMode<AFollowersGameMode>();
+  if(gameMode)
+  {
+    gameMode->StopGameplay();
+  }
 }
 
 void AMainPlayerController::OnRoundBegin()

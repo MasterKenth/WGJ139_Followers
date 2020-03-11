@@ -31,6 +31,15 @@ void AFollowersGameMode::AddFollowerForNextRound(int32 CultID, int32 Add)
   }
 }
 
+void AFollowersGameMode::StopGameplay()
+{
+  if(FollowersGameState)
+  {
+    GetWorldTimerManager().ClearTimer(FollowersGameState->RoundEndHandle);
+    GetWorldTimerManager().ClearTimer(FollowersGameState->NextRoundBeginHandle);
+  }
+}
+
 void AFollowersGameMode::BeginPlay()
 {
   Super::BeginPlay();
