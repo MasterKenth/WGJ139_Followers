@@ -123,8 +123,8 @@ void AFollowersGameMode::SetupCults()
     }
 
     // Generate NPC cults
-    const int32 totalFollowersToGenerate = 3;
-    const int32 numNPCCults = 1;//FMath::RandRange(2, 5);
+    const int32 totalFollowersToGenerate = 99;
+    const int32 numNPCCults = FMath::RandRange(2, 5);
     int32 followersGenerated = 0;
     for(int32 i = 0; i < numNPCCults; i++)
     {
