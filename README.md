@@ -3,6 +3,10 @@ Defeat enemy cult followers and force them to join your own cult! May the bigges
 
 My entry for the Weekly Game Jam #139 (theme: followers).
 
+## Links
+* [itch.io game page](https://masterkenth.itch.io/wgj139-cult-wars)
+* [wgj 139 submission](https://itch.io/jam/weekly-game-jam-139/rate/586245)
+
 ## Summary
 Cult Wars is a 2D top-down round-based arena fighter with a battle-royale-like element. You play as a cult leader and 
 "defeat" enemy cult followers in order to convert them to your own cult. Each round is time-based and after each round 
