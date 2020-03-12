@@ -41,6 +41,7 @@ protected:
 	void OnInput_MoveUp(float Value);
 	void OnInput_Attack();
 	void OnInput_QuitGame();
+	void OnInput_ToggleMusic();
 
 	void OnPlayerKilled();
 

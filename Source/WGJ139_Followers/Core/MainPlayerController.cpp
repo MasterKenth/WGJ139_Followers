@@ -9,6 +9,9 @@
 #include "Camera/CameraComponent.h"
 #include "FollowersGameMode.h"
 #include "GenericPlatform/GenericPlatformMisc.h"
+#include "Sound/AmbientSound.h"
+#include "EngineUtils.h"
+#include "Components/AudioComponent.h"
 
 AMainPlayerController::AMainPlayerController()
 {
@@ -37,6 +40,7 @@ void AMainPlayerController::SetupInputComponent()
   InputComponent->BindAxis(TEXT("MoveUp"), this, &AMainPlayerController::OnInput_MoveUp);
   InputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &AMainPlayerController::OnInput_Attack);
   InputComponent->BindAction(TEXT("QuitGame"), EInputEvent::IE_Pressed, this, &AMainPlayerController::OnInput_QuitGame);
+  InputComponent->BindAction(TEXT("ToggleMusic"), EInputEvent::IE_Pressed, this, &AMainPlayerController::OnInput_ToggleMusic);
 }
 
 void AMainPlayerController::OnPossess(APawn* aPawn)
@@ -89,6 +93,26 @@ void AMainPlayerController::OnPlayerKilled()
   if(gameMode)
   {
     gameMode->StopGameplay();
+  }
+}
+
+void AMainPlayerController::OnInput_ToggleMusic()
+{
+  for(TActorIterator<AAmbientSound> itr(GetWorld()); itr; ++itr)
+  {
+    AAmbientSound* bgm = *itr;
+    if(bgm)
+    {
+      if(!bgm->GetAudioComponent()->IsPlaying())
+      {
+        bgm->GetAudioComponent()->FadeIn(2.0f, 0.5f, 0.0, EAudioFaderCurve::SCurve);
+      }
+      else
+      {
+        bgm->GetAudioComponent()->Stop();
+      }
+      break;
+    }
   }
 }
 
