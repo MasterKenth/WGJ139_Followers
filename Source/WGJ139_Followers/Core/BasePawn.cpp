@@ -13,6 +13,8 @@
 #include "Components/WidgetComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "TimerManager.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 ABasePawn::ABasePawn()
 {
@@ -26,6 +28,7 @@ ABasePawn::ABasePawn()
 	bDead = false;
 	TakeDamageInvulnerabilityTime = 0.3f;
 	LastDamageTime = 0;
+	HitSoundPitchRange = FVector2D(0.9f, 1.1f);
 
 	RootComponent = Root = CreateDefaultSubobject<UBoxComponent>(TEXT("Root"));
 	Root->SetCollisionProfileName(TEXT("Pawn"));
@@ -151,6 +154,11 @@ void ABasePawn::TakeDamage(int32 Damage, AActor* DamageInstigator)
 
 		Health = FMath::Clamp(newHealth, 0, MaxHealth);
 		LastDamageTime = currentWorldTime;
+
+		if(HitSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, Sprite->GetComponentLocation(), 1.0f, FMath::RandRange(HitSoundPitchRange.X, HitSoundPitchRange.Y));
+		}
 
 		UpdateHealthBarDisplay();
 

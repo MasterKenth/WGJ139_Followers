@@ -29,6 +29,12 @@ public:
 	float AttackCooldown;
 
 	UPROPERTY(EditAnywhere)
+	class USoundCue* HitSound;
+	
+	UPROPERTY(EditAnywhere)
+	FVector2D HitSoundPitchRange;
+
+	UPROPERTY(EditAnywhere)
 	float TakeDamageInvulnerabilityTime;
 
 	UPROPERTY(VisibleDefaultsOnly)
