@@ -266,7 +266,7 @@ FCultData AFollowersGameMode::GeneratePseudoRandomCult(const TArray<FCultData>& 
     "Homeus",
     "Moha Purk",
     "Seecharp Bad",
-    "the Unreal God",
+    "The Unreal God",
     "Divinto",
     "Bacciatio",
     "Yare Yare Dase",
