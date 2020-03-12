@@ -27,8 +27,12 @@ EBTNodeResult::Type UBTTask_MoveToWithoutNav::ExecuteTask(UBehaviorTreeComponent
     UMainPawnMovementComponent* pawnMovement = Cast<UMainPawnMovementComponent>(pawn->GetMovementComponent());
     if(pawnMovement)
     {
-      if(FVector::DistSquared2D(pawn->GetActorLocation(), targetPawn->GetActorLocation()) < pawnMovement->BaseMoveSpeed * pawnMovement->BaseMoveSpeed)
+      FVector currentLocation = pawn->GetActorLocation();
+      FVector targetLocation = targetPawn->GetActorLocation();
+      if(FVector::DistSquared2D(currentLocation, targetLocation) < pawnMovement->BaseMoveSpeed * pawnMovement->BaseMoveSpeed)
       {
+        FVector dir = (targetLocation - currentLocation).GetSafeNormal2D();
+        pawn->UpdateLookDir(dir.X);
         return EBTNodeResult::Succeeded;
       }
       return EBTNodeResult::InProgress;
